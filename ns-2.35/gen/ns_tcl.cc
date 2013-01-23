@@ -19499,6 +19499,7 @@ Agent/RfidTag set tagEPC_ 10\n\
 Agent/RfidTag set singularization_ 1\n\
 Agent/RfidTag set service_ 0\n\
 Agent/RfidTag set kill_ 0\n\
+Agent/RfidTag set time_ 1\n\
 \n\
 Agent/UDP set packetSize_ 1000\n\
 Agent/UDP instproc done {} { }\n\

@@ -105,7 +105,7 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
   hdr_ip* hdrip = hdr_ip::access(pkt);
   // Access the RfidReader header for the received packet:
   hdr_rfidPacket* hdr = hdr_rfidPacket::access(pkt);
-  if ((hdr->tipo_==0)&&(hdr->id_==id_)) {
+  if ((hdr->tipo_==0)&&(hdr->id_==id_)) { //Se o pacote é do tipo TAG-LEITOR e for endereçado a este leitor
   	//printf("[LEITOR] (%d) recebeu RESPOSTA de (%i)\n",hdr->id_,hdr->tagEPC_);
 	if (hdr->ack_==1) {
 		//Enviar ACK de confirmação

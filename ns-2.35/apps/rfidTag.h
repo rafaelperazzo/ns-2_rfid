@@ -67,11 +67,12 @@ public:
 	RfidTagAgent();
 	virtual int command(int argc, const char*const* argv);
 	virtual void recv(Packet*, Handler*);
-	int id_;
-	int tagEPC_;
-	int service_;
+	int id_; //ID do último leitor que fez a solicitação
+	int tagEPC_; //Código EPC da tag
+	int service_; 
 	int kill_;
-	int time_;
+	int time_; //Tempo aleatório esperado antes de responder ao leitor
+	int slot_; //Slot utilizado para singularização
 };
 
 #endif // ns_rfidTag_h

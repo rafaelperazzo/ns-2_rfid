@@ -121,8 +121,8 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		}
 	  }
   }
-  else if (hdr->tipo_==2) {
-	id_=hdr->id_;
+  else if (hdr->tipo_==2) { //Tag recebe um ACK
+	id_=hdr->id_; //Grava o ID do leitor que confirmou o recebimento
 	//printf("[TAG]Recebido ACK(%d)\n",hdr->tagEPC_);
   }
   else { //Descarta o pacote caso a origem não tenha sido um leitor
