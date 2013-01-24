@@ -23,10 +23,10 @@ $val(netif) set Pt_ 0.28
 $val(netif) set RXThresh_ 2.12249e-07
 
 #DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
-#$val(mac) set RTSThreshold_ 3000
+$val(mac) set RTSThreshold_ 3000
 #DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
-#$val(mac) set basicRate_ 80Kb
-#$val(mac) set dataRate_ 80Kb
+$val(mac) set basicRate_ 80Kb
+$val(mac) set dataRate_ 80Kb
 
 $ns use-newtrace
 $ns trace-all $tracefd

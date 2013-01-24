@@ -859,19 +859,26 @@ Agent set class_ 0
 
 Agent/Ping set packetSize_ 64
 #RFID
-Agent/RfidReader set packetSize_ 64
+Agent/RfidReader set packetSize_ 4
 Agent/RfidReader set id_ 12345
 Agent/RfidReader set tagEPC_ 1
 Agent/RfidReader set singularization_ 1
 Agent/RfidReader set service_ 0
+Agent/RfidReader set qValue_ 4
+Agent/RfidReader set memory_ 0
+Agent/RfidReader set rng16_ 0
 
-Agent/RfidTag set packetSize_ 64
+
+Agent/RfidTag set packetSize_ 4
 Agent/RfidTag set id_ 0
 Agent/RfidTag set tagEPC_ 10
 Agent/RfidTag set singularization_ 1
 Agent/RfidTag set service_ 0
 Agent/RfidTag set kill_ 0
 Agent/RfidTag set time_ 1
+Agent/RfidTag set rng16_ 0
+Agent/RfidTag set memory_ 0
+Agent/RfidTag set slot_ 0
 
 Agent/UDP set packetSize_ 1000
 Agent/UDP instproc done {} { }

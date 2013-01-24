@@ -67,12 +67,19 @@ public:
 	RfidTagAgent();
 	virtual int command(int argc, const char*const* argv);
 	virtual void recv(Packet*, Handler*);
-	int id_; //ID do último leitor que fez a solicitação
-	int tagEPC_; //Código EPC da tag
-	int service_; 
-	int kill_;
-	int time_; //Tempo aleatório esperado antes de responder ao leitor
-	int slot_; //Slot utilizado para singularização
+	int id_; //Stores the last received READER ID
+	int tagEPC_; //Tag EPC
+	int service_; //Kind of service: Tracking, Standard,...
+	int kill_; //Kill flag
+	int time_; //Random wait time for send a packet
+	int slot_; //Slot number
+	int rng16_; //Random number
+	int memory_; //Optional memory
+	enum FLUXO {FLOW_RT=0, FLOW_TR=1,FLOW_RT_ACK=2}flow;
+        enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2}service;
+        enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
+
+	
 };
 
 #endif // ns_rfidTag_h

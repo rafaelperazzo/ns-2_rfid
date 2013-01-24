@@ -71,6 +71,8 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET)
 	bind("id_",&id_);
 	bind("singularization_",&singularization_);
 	bind("service_",&service_);
+	bind("memory_",&memory_);
+	bind("qValue_",&qValue_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -79,22 +81,44 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
     if (strcmp(argv[1], "query-tags") == 0) {
       //Scheduler& sch = Scheduler::instance();
       //printf("%f\n",sch.clock());
-      Packet* pkt = allocpkt();
+      //Criando Pacote
+      Packet* pkt = allocpkt(); 
+      //Criando cabeçado da camada de Rede
       hdr_ip* iph = HDR_IP(pkt);
+      //Criando cabeçalho RFID
       hdr_rfidPacket *ph = hdr_rfidPacket::access(pkt);
-      ph->id_ = id_;
-      ph->tipo_ = 1;
-      ph->singularization_ = singularization_;
-      if (service_==1) { ph->service_=1; }
-      iph->daddr() = IP_BROADCAST;
+      //Preparando cabeçalho
+      ph->id_ = id_; //ID do leitor
+      ph->tipo_ = FLOW_RT; //Tipo de fluxo: LEITOR-TAG
+      ph->singularization_ = singularization_; //Responde ou não imediatamente
+      //if (service_==1) { ph->service_=1; } //Tipo de serviço: Responde apenas requisições de leitores diferentes
+      ph->service_=service_;
+      iph->daddr() = IP_BROADCAST; //Destino: broadcast
       iph->dport() = iph->sport();
       //printf("Antes de enviar pacote de requisição...\n");
       send(pkt, (Handler*) 0);
       //printf("Requisição enviada com sucesso...\n");
       return (TCL_OK);
     }
+    else if (strcmp(argv[1], "standard-query-tags") == 0) {
+	Packet* pkt = allocpkt(); 
+	//Create network header
+	hdr_ip* ipHeader = HDR_IP(pkt);
+	//Create RFID header
+	hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+	//Prepating headers
+      	rfidHeader->id_ = id_; //Reader ID
+      	rfidHeader->tipo_ = FLOW_RT; //flow direction
+      	rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+      	rfidHeader->service_=SERVICE_STANDARD;
+      	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
+      	ipHeader->dport() = ipHeader->sport();
+      	//Sends the packet
+	send(pkt, (Handler*) 0);
+      	return (TCL_OK);
+    }
   }
-  
+
   // If the command hasn't been processed by RfidReaderAgent()::command,
   // call the command() function for the base class
   return (Agent::command(argc, argv));
@@ -107,24 +131,26 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
   hdr_ip* hdrip = hdr_ip::access(pkt);
   // Access the RfidReader header for the received packet:
   hdr_rfidPacket* hdr = hdr_rfidPacket::access(pkt);
-  if ((hdr->tipo_==0)&&(hdr->id_==id_)) { //Se o pacote é do tipo TAG-LEITOR e for endereçado a este leitor
+  if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_TRACKING)) { //Se o pacote é do tipo TAG-LEITOR e for endereçado a este leitor
   	//printf("[LEITOR] (%d) recebeu RESPOSTA de (%i)\n",hdr->id_,hdr->tagEPC_);
 	if (hdr->ack_==1) {
 		//Enviar ACK de confirmação
 		Packet* pktret = allocpkt();
-	        hdr_rfidPacket* hdrTag = hdr_rfidPacket::access(pktret);
-        	hdr_ip* hdrIp = hdr_ip::access(pktret);
-	        hdrTag->tagEPC_ = hdr->tagEPC_;
-        	hdrTag->id_ = hdr->id_;
-	        hdrTag->tipo_ = 2;
+	        hdr_rfidPacket* rfidHeader = hdr_rfidPacket::access(pktret);
+        	hdr_ip* ipHeader = hdr_ip::access(pktret);
+	        rfidHeader->tagEPC_ = hdr->tagEPC_;
+        	rfidHeader->id_ = hdr->id_;
+	        rfidHeader->tipo_ = FLOW_RT_ACK;
         	//hdrIp->daddr() = IP_BROADCAST;
-	        hdrIp->daddr() = hdrip->saddr();
-        	hdrIp->dport() = hdrip->sport();
+	        ipHeader->daddr() = hdrip->saddr();
+        	ipHeader->dport() = hdrip->sport();
 		send(pktret,0);
-		//printf("[LEITOR-ACK]Enviado ACK para %d\n",hdr->tagEPC_);
 	}
   }
-  else if(hdr->tipo_==0){
+  else if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_STANDARD)) {
+	
+  }
+  else if(hdr->tipo_==FLOW_RT){
 	printf("Leitor (NÃO IDENTIFICADO) recebeu RESPOSTA de (%i)\n",hdr->tagEPC_);
   }
   Packet::free(pkt);

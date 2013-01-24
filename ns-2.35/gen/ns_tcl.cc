@@ -19514,19 +19514,26 @@ Agent set class_ 0\n\
 \n\
 \n\
 Agent/Ping set packetSize_ 64\n\
-Agent/RfidReader set packetSize_ 64\n\
+Agent/RfidReader set packetSize_ 4\n\
 Agent/RfidReader set id_ 12345\n\
 Agent/RfidReader set tagEPC_ 1\n\
 Agent/RfidReader set singularization_ 1\n\
 Agent/RfidReader set service_ 0\n\
+Agent/RfidReader set qValue_ 4\n\
+Agent/RfidReader set memory_ 0\n\
+Agent/RfidReader set rng16_ 0\n\
 \n\
-Agent/RfidTag set packetSize_ 64\n\
+\n\
+Agent/RfidTag set packetSize_ 4\n\
 Agent/RfidTag set id_ 0\n\
 Agent/RfidTag set tagEPC_ 10\n\
 Agent/RfidTag set singularization_ 1\n\
 Agent/RfidTag set service_ 0\n\
 Agent/RfidTag set kill_ 0\n\
 Agent/RfidTag set time_ 1\n\
+Agent/RfidTag set rng16_ 0\n\
+Agent/RfidTag set memory_ 0\n\
+Agent/RfidTag set slot_ 0\n\
 \n\
 Agent/UDP set packetSize_ 1000\n\
 Agent/UDP instproc done {} { }\n\

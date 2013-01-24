@@ -74,6 +74,9 @@ RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), tagEPC_(0), id_(0)
 	bind("service_",&service_);
 	bind("kill_",&kill_);
 	bind("time_",&time_);
+	bind("slot_",&slot_);
+	bind("memory_",&memory_);
+	bind("rng16_",&rng16_);
 }
 
 int RfidTagAgent::command(int argc, const char*const* argv)
@@ -92,36 +95,37 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
   hdr_ip* hdrip = hdr_ip::access(pkt);
   // Lê o conteúdo do cabeçalho do pacote RFID
   hdr_rfidPacket* hdr = hdr_rfidPacket::access(pkt);
-  if (hdr->tipo_==1) { //Responde apenas a requisições de leitores
+  if (hdr->tipo_==FLOW_RT) { //Responde apenas a requisições de leitores
 	  //printf("Tag (%d) recebeu REQUISICAO do leitor (%d)\n",tagEPC_, hdr->id_);
-  	  //Packet::free(pkt);
   	  //criar pacote de resposta
   	  Packet* pktret = allocpkt();
-  	  hdr_rfidPacket* hdrTag = hdr_rfidPacket::access(pktret);
-  	  hdr_ip* hdrIp = hdr_ip::access(pktret);
-  	  hdrTag->tagEPC_ = tagEPC_;
-	  hdrTag->id_ = hdr->id_;
-  	  hdrTag->tipo_ = 0;
-  	  //hdrIp->daddr() = IP_BROADCAST;
-	  hdrIp->daddr() = hdrip->saddr();
-  	  hdrIp->dport() = hdrip->sport();
-	  if (hdr->service_==1) {
-	  	hdrTag->ack_=1; //
+  	  hdr_rfidPacket* rfidHeader = hdr_rfidPacket::access(pktret);
+  	  hdr_ip* ipHeader = hdr_ip::access(pktret);
+  	  rfidHeader->tagEPC_ = tagEPC_;
+	  rfidHeader->id_ = hdr->id_;
+  	  rfidHeader->tipo_ = FLOW_TR;
+	  ipHeader->daddr() = hdrip->saddr();
+  	  ipHeader->dport() = hdrip->sport();
+	  if (hdr->service_==SERVICE_TRACKING) {
+	  	rfidHeader->ack_=1;
+		if (hdr->singularization_==SING_NOSINGULARIZATION) { //Se não for solicitada singularizaçao
+                	if (hdr->id_!=id_) { 
+                        	send(pktret,0);
+                	}
+          	}
+          	else { //caso seja solicitada singularização
+                	if (hdr->id_!=id_) {
+                        	double tempo = Random::uniform(0,time_);
+                        	Scheduler& sch = Scheduler::instance();
+                        	sch.schedule(target_,pktret,tempo);
+                	}
+          	}
 	  }
-	  if (hdr->singularization_==0) { //Se não for solicitada singularizaçao
-  	  	if (hdr->id_!=id_) { 
-			send(pktret,0);
-		}
-	  }
-	  else { //caso seja solicitada singularização
-		if (hdr->id_!=id_) {
-			double tempo = Random::uniform(0,time_);
-       			Scheduler& sch = Scheduler::instance();
-       			sch.schedule(target_,pktret,tempo);
-		}
+	  else if (hdr->service_==SERVICE_STANDARD) {
+	  
 	  }
   }
-  else if (hdr->tipo_==2) { //Tag recebe um ACK
+  else if (hdr->tipo_==FLOW_RT_ACK) { //Tag recebe um ACK
 	id_=hdr->id_; //Grava o ID do leitor que confirmou o recebimento
 	//printf("[TAG]Recebido ACK(%d)\n",hdr->tagEPC_);
   }
