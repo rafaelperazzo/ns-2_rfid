@@ -1,8 +1,8 @@
 # Define options
 set val(chan) Channel/WirelessChannel ;# channel type
 set val(prop) Propagation/TwoRayGround ;# radio-propagation model: TwoRayGround/FreeSpace
-set val(netif) Phy/WirelessPhy ;# network interface type
-set val(mac) Mac/802_11 ;# MAC type
+set val(netif) Phy/RfidPhy ;# network interface type
+set val(mac) Mac/RFID ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
@@ -19,14 +19,14 @@ set tracefd [open rfid.tr w]
 set namtrace [open rfid.nam w] 
 
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
-$val(netif) set Pt_ 0.28
-$val(netif) set RXThresh_ 2.12249e-07
+#$val(netif) set Pt_ 0.28
+#$val(netif) set RXThresh_ 2.12249e-07
 
 #DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
-$val(mac) set RTSThreshold_ 3000
+#$val(mac) set RTSThreshold_ 3000
 #DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
-$val(mac) set basicRate_ 80Kb
-$val(mac) set dataRate_ 80Kb
+#$val(mac) set basicRate_ 80Kb
+#$val(mac) set dataRate_ 80Kb
 
 $ns use-newtrace
 $ns trace-all $tracefd
@@ -50,12 +50,13 @@ $ns node-config -adhocRouting $val(rp) \
 -antType $val(ant) \
 -propType $val(prop) \
 -phyType $val(netif) \
--channelType $val(chan) \
+#-channelType $val(chan) \
 -topoInstance $topo \
 -agentTrace OFF \
 -routerTrace OFF \
 -macTrace ON \
--movementTrace OFF
+-movementTrace OFF \
+-channel $chan_1_
 
 for {set i 0} {$i < $val(nn) } { incr i } {
 	set n($i) [$ns node] 

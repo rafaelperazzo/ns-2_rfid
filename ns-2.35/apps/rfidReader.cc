@@ -54,7 +54,7 @@
 
 #include "rfidReader.h"
 #include "rfidPacket.h"
-
+#include <time.h>
 static class RfidReaderClass : public TclClass {
 public:
 	RfidReaderClass() : TclClass("Agent/RfidReader") {}
@@ -77,6 +77,8 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 {
   if (argc == 2) {
     if (strcmp(argv[1], "query-tags") == 0) {
+      //Scheduler& sch = Scheduler::instance();
+      //printf("%f\n",sch.clock());
       Packet* pkt = allocpkt();
       hdr_ip* iph = HDR_IP(pkt);
       hdr_rfidPacket *ph = hdr_rfidPacket::access(pkt);

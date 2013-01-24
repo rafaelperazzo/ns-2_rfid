@@ -291,7 +291,7 @@ OBJ_CC = \
 	diffusion/diffusion.o diffusion/diff_rate.o diffusion/diff_prob.o \
 	diffusion/diff_sink.o diffusion/flooding.o diffusion/omni_mcast.o \
 	diffusion/hash_table.o diffusion/routing_table.o diffusion/iflist.o \
-	tcp/tfrc.o tcp/tfrc-sink.o mobile/energy-model.o apps/ping.o apps/rfidReader.o apps/rfidTag.o apps/rfidPacket.o tcp/tcp-rfc793edu.o \
+	tcp/tfrc.o tcp/tfrc-sink.o mobile/energy-model.o apps/ping.o apps/rfidReader.o apps/rfidTag.o apps/rfidPacket.o tcp/tcp-rfc793edu.o mac/rfid-phy.o mac/mac-rfid.o mac/macRfid-timers.o \
 	queue/rio.o queue/semantic-rio.o tcp/tcp-sack-rh.o tcp/scoreboard-rh.o \
 	plm/loss-monitor-plm.o plm/cbr-traffic-PP.o \
 	linkstate/hdr-ls.o \

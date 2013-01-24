@@ -54,6 +54,7 @@
 #define HDR_ARP(p)      (hdr_arp::access(p))
 #define HDR_MAC(p)      (hdr_mac::access(p))
 #define HDR_MAC802_11(p) ((hdr_mac802_11 *)hdr_mac::access(p))
+#define HDR_MACRFID(p)  ((hdr_macRfid *)hdr_mac::access(p))
 #define HDR_MAC_TDMA(p) ((hdr_mac_tdma *)hdr_mac::access(p))
 #define HDR_SMAC(p)     ((hdr_smac *)hdr_mac::access(p))
 #define HDR_LL(p)       (hdr_ll::access(p))
