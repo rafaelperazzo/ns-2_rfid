@@ -42,12 +42,14 @@
 
 #include <packet-stamp.h>
 #include <wireless-phy.h>
+#include <rfid-phy.h>
 #include <propagation.h>
 
 class TwoRayGround : public Propagation {
 public:
   TwoRayGround();
   virtual double Pr(PacketStamp *tx, PacketStamp *rx, WirelessPhy *ifp);
+  //virtual double Pr(PacketStamp *tx, PacketStamp *rx, RfidPhy *ifp);
   virtual double getDist(double Pr, double Pt, double Gt, double Gr,
 			 double hr, double ht, double L, double lambda);
 

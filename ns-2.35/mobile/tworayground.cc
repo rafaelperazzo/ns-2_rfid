@@ -45,6 +45,7 @@
 #include <mobilenode.h>
 #include <propagation.h>
 #include <wireless-phy.h>
+#include <rfid-phy.h>
 #include <tworayground.h>
 
 static class TwoRayGroundClass: public TclClass {
@@ -169,7 +170,98 @@ TwoRayGround::Pr(PacketStamp *t, PacketStamp *r, WirelessPhy *ifp)
     return Pr;
   }
 }
+/*
+double
+TwoRayGround::Pr(PacketStamp *t, PacketStamp *r, RfidPhy *ifp)
+{
+  double rX, rY, rZ;		// location of receiver
+  double tX, tY, tZ;		// location of transmitter
+  double d;				// distance
+  double hr, ht;		// height of recv and xmit antennas
+  double Pr;			// received signal power
 
+  double L = ifp->getL();			// system loss
+  double lambda = ifp->getLambda();	// wavelength
+
+  r->getNode()->getLoc(&rX, &rY, &rZ);
+  t->getNode()->getLoc(&tX, &tY, &tZ);
+
+  rX += r->getAntenna()->getX();
+  rY += r->getAntenna()->getY();
+  tX += t->getAntenna()->getX();
+  tY += t->getAntenna()->getY();
+
+  d = sqrt((rX - tX) * (rX - tX) 
+	   + (rY - tY) * (rY - tY) 
+	   + (rZ - tZ) * (rZ - tZ));
+    
+  /* We're going to assume the ground is essentially flat.
+     This empirical two ground ray reflection model doesn't make 
+     any sense if the ground is not a plane. */
+/*
+  if (rZ != tZ) {
+    printf("%s: TwoRayGround propagation model assume flat ground\n",
+	   __FILE__);
+  }
+
+  hr = rZ + r->getAntenna()->getZ();
+  ht = tZ + t->getAntenna()->getZ();
+
+  if (hr != last_hr || ht != last_ht)
+    { // recalc the cross-over distance
+      /* 
+	         4 * PI * hr * ht
+	 d = ----------------------------
+	             lambda
+	   * At the crossover distance, the received power predicted by the two-ray
+	   * ground model equals to that predicted by the Friis equation.
+       */
+/*
+      crossover_dist = (4 * PI * ht * hr) / lambda;
+      last_hr = hr; last_ht = ht;
+#if DEBUG > 3
+      printf("TRG: xover %e.10 hr %f ht %f\n",
+	      crossover_dist, hr, ht);
+#endif
+    }
+
+  /*
+   *  If the transmitter is within the cross-over range , use the
+   *  Friis equation.  Otherwise, use the two-ray
+   *  ground reflection model.
+   */
+/*
+  double Gt = t->getAntenna()->getTxGain(rX - tX, rY - tY, rZ - tZ, 
+					 t->getLambda());
+  double Gr = r->getAntenna()->getRxGain(tX - rX, tY - rY, tZ - rZ,
+					 r->getLambda());
+
+#if DEBUG > 3
+  printf("TRG %.9f %d(%d,%d)@%d(%d,%d) d=%f xo=%f :",
+	 Scheduler::instance().clock(), 
+	 t->getNode()->index(), (int)tX, (int)tY,
+	 r->getNode()->index(), (int)rX, (int)rY,
+	 d, crossover_dist);
+  //  printf("\n\t Pt %e Gt %e Gr %e lambda %e L %e :",
+  //         t->getTxPr(), Gt, Gr, lambda, L);
+#endif
+
+  if(d <= crossover_dist) {
+    Pr = Friis(t->getTxPr(), Gt, Gr, lambda, L, d);
+#if DEBUG > 3
+    printf("Friis %e\n",Pr);
+#endif
+    return Pr;
+  }
+  else {
+    Pr = TwoRay(t->getTxPr(), Gt, Gr, ht, hr, L, d);
+#if DEBUG > 3
+    printf("TwoRay %e\n",Pr);
+#endif    
+    return Pr;
+  }
+}
+*/
 double TwoRayGround::getDist(double Pr, double Pt, double Gt, double Gr, double hr, double ht, double , double )
 {
        /* Get quartic root */

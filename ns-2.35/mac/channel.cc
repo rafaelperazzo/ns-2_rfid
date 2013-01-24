@@ -58,6 +58,7 @@ static const char rcsid[] =
 #include "lib/bsd-list.h"
 #include "phy.h"
 #include "wireless-phy.h"
+#include "rfid-phy.h"
 #include "mobilenode.h"
 #include "ip.h"
 #include "dsr/hdr_sr.h"
@@ -630,7 +631,10 @@ WirelessChannel::calcHighestAntennaZ(Phy *tifp)
     	   } else if (dynamic_cast<WirelessPhy*>(n)) {
     		   if(((WirelessPhy *)n)->getAntennaZ() > highestZ)
     			   highestZ = ((WirelessPhy *)n)->getAntennaZ();
-    	   } else highestZ = 0;
+    	   //} else if (dynamic_cast<RfidPhy*>(n)) {
+             //      if(((RfidPhy *)n)->getAntennaZ() > highestZ)
+             //              highestZ = ((RfidPhy *)n)->getAntennaZ();
+           } else highestZ = 0;
        }
 
        highestAntennaZ_ = highestZ;
@@ -645,6 +649,11 @@ WirelessChannel::calcHighestAntennaZ(Phy *tifp)
     	   distCST_ = wifp->getDist(wifp->getCSThresh(), wifp->getPt(), 1.0, 1.0,
     			   highestZ , highestZ, wifp->getL(),
     			   wifp->getLambda());
+       //} else if (dynamic_cast<RfidPhy*>(tifp)) {
+       //    RfidPhy *wifp = (RfidPhy *)tifp;
+       //    distCST_ = wifp->getDist(wifp->getCSThresh(), wifp->getPt(), 1.0, 1.0,
+       //                    highestZ , highestZ, wifp->getL(),
+       //                    wifp->getLambda());
        } else distCST_ = DBL_MAX;
 }
 

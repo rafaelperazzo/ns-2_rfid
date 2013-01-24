@@ -40,6 +40,7 @@
 #include <topography.h>
 #include <propagation.h>
 #include <wireless-phy.h>
+#include <rfid-phy.h>
 
 class PacketStamp;
 int
@@ -87,6 +88,18 @@ Propagation::Pr(PacketStamp *, PacketStamp *, WirelessPhy *)
 	abort();
 	return 0; // Make msvc happy
 }
+
+/*
+double
+Propagation::Pr(PacketStamp *, PacketStamp *, RfidPhy *)
+{
+	fprintf(stderr,
+		"Propagation model %s not implemented for SharedMedia interface\n",
+		name);
+	abort();
+	return 0; // Make msvc happy
+}
+*/
 
 double
 Propagation::getDist(double , double , double , double , double , double , double , double )
@@ -161,6 +174,44 @@ double FreeSpace::Pr(PacketStamp *t, PacketStamp *r, WirelessPhy *ifp)
 	return Pr;
 }
 
+/*
+double FreeSpace::Pr(PacketStamp *t, PacketStamp *r, RfidPhy *ifp)
+{
+	double L = ifp->getL();		// system loss
+	double lambda = ifp->getLambda();   // wavelength
+
+	double Xt, Yt, Zt;		// location of transmitter
+	double Xr, Yr, Zr;		// location of receiver
+
+	t->getNode()->getLoc(&Xt, &Yt, &Zt);
+	r->getNode()->getLoc(&Xr, &Yr, &Zr);
+
+	// Is antenna position relative to node position?
+	Xr += r->getAntenna()->getX();
+	Yr += r->getAntenna()->getY();
+	Zr += r->getAntenna()->getZ();
+	Xt += t->getAntenna()->getX();
+	Yt += t->getAntenna()->getY();
+	Zt += t->getAntenna()->getZ();
+
+	double dX = Xr - Xt;
+	double dY = Yr - Yt;
+	double dZ = Zr - Zt;
+	double d = sqrt(dX * dX + dY * dY + dZ * dZ);
+
+	// get antenna gain
+	double Gt = t->getAntenna()->getTxGain(dX, dY, dZ, lambda);
+	double Gr = r->getAntenna()->getRxGain(dX, dY, dZ, lambda);
+
+	// calculate receiving power at distance
+	double Pr = Friis(t->getTxPr(), Gt, Gr, lambda, L, d);
+	// warning: use of `l' length character with `f' type character
+	//  - Sally Floyd, FreeBSD.
+	printf("%lf: d: %lf, Pr: %e\n", Scheduler::instance().clock(), d, Pr);
+
+	return Pr;
+}
+*/
 double
 FreeSpace::getDist(double Pr, double Pt, double Gt, double Gr, double , double , double L, double lambda)
 {

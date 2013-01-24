@@ -1,13 +1,13 @@
 # Define options
 set val(chan) Channel/WirelessChannel ;# channel type
 set val(prop) Propagation/TwoRayGround ;# radio-propagation model: TwoRayGround/FreeSpace
-set val(netif) Phy/RfidPhy ;# network interface type
-set val(mac) Mac/RFID ;# MAC type
+set val(netif) Phy/WirelessPhy ;# network interface type
+set val(mac) Mac/802_11 ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 50 ;# max packet in ifq
-set val(nn) 100 ;# number of mobilenodes
+set val(nn) 5 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 set val(x) 1000 ;# X dimension of topography
 set val(y) 1000 ;# Y dimension of topography 
@@ -19,8 +19,8 @@ set tracefd [open rfid.tr w]
 set namtrace [open rfid.nam w] 
 
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
-#$val(netif) set Pt_ 0.28
-#$val(netif) set RXThresh_ 2.12249e-07
+$val(netif) set Pt_ 0.28
+$val(netif) set RXThresh_ 2.12249e-07
 
 #DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
 #$val(mac) set RTSThreshold_ 3000
@@ -37,7 +37,8 @@ set topo [new Topography]
 
 $topo load_flatgrid $val(x) $val(y)
 
-create-god $val(nn)
+#create-god $val(nn)
+create-god [expr $val(nn)]
 
 set chan_1_ [new $val(chan)]
 
@@ -133,7 +134,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 
 
 $ns at 1.0 "$reader1 query-tags"
-#$ns at 1.5 "$reader1 query-tags"
+$ns at 1.5 "$reader1 query-tags"
 
 # Define node initial position in nam
 $ns initial_node_pos $n(0) 20
