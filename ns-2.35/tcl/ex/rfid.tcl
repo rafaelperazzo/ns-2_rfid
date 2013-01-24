@@ -1,13 +1,13 @@
 # Define options
 set val(chan) Channel/WirelessChannel ;# channel type
-set val(prop) Propagation/FreeSpace ;# radio-propagation model
+set val(prop) Propagation/TwoRayGround ;# radio-propagation model: TwoRayGround/FreeSpace
 set val(netif) Phy/WirelessPhy ;# network interface type
 set val(mac) Mac/802_11 ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 50 ;# max packet in ifq
-set val(nn) 100 ;# number of mobilenodes
+set val(nn) 5 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 set val(x) 1000 ;# X dimension of topography
 set val(y) 1000 ;# Y dimension of topography 
@@ -16,28 +16,29 @@ set val(stop) 10 ;# time of simulation end
 set ns [new Simulator]
 set tracefd [open rfid.tr w]
 #set windowVsTime2 [open wintr w]
-#set namtrace [open rfid.nam w] 
+set namtrace [open rfid.nam w] 
 
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
 $val(netif) set Pt_ 0.28
 $val(netif) set RXThresh_ 2.12249e-07
 
 #DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
-$val(mac) set RTSThreshold_ 3000
+#$val(mac) set RTSThreshold_ 3000
 #DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
-$val(mac) set basicRate_ 80Kb
-$val(mac) set dataRate_ 80Kb
+#$val(mac) set basicRate_ 80Kb
+#$val(mac) set dataRate_ 80Kb
 
 $ns use-newtrace
 $ns trace-all $tracefd
-#$ns namtrace-all-wireless $namtrace $val(x) $val(y)
+$ns namtrace-all-wireless $namtrace $val(x) $val(y)
 
 # set up topography object
 set topo [new Topography]
 
 $topo load_flatgrid $val(x) $val(y)
 
-create-god $val(nn)
+#create-god $val(nn)
+create-god [expr $val(nn)]
 
 set chan_1_ [new $val(chan)]
 
@@ -50,20 +51,21 @@ $ns node-config -adhocRouting $val(rp) \
 -antType $val(ant) \
 -propType $val(prop) \
 -phyType $val(netif) \
--channelType $val(chan) \
+#-channelType $val(chan) \
 -topoInstance $topo \
 -agentTrace OFF \
 -routerTrace OFF \
 -macTrace ON \
--movementTrace OFF
+-movementTrace OFF \
+-channel $chan_1_
 
 for {set i 0} {$i < $val(nn) } { incr i } {
 	set n($i) [$ns node] 
 }
 
 # Provide initial location of mobilenodes..
-$n(0) set X_ 15
-$n(0) set Y_ 8
+$n(0) set X_ 10
+$n(0) set Y_ 10
 $n(0) set Z_ 0.0
 
 #$n(1) set X_ 82
@@ -81,8 +83,9 @@ set rng2 [new RNG]
 $rng2 seed 0
 
 for {set i 1} {$i < $val(nn) } { incr i } {
-      $n($i) set X_ [$rng1 uniform 0 100]
-      $n($i) set Y_ [$rng2 uniform 0 100]
+      $n($i) set X_ [$rng1 uniform 0 20]
+      #puts "[$rng1 uniform 0.5 2.5]"
+      $n($i) set Y_ [$rng2 uniform 0 20]
       $n($i) set Z_ 0.0
       #$ns at 0.0 "$n($i) label TAG"
 }
@@ -131,13 +134,13 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 
 
 $ns at 1.0 "$reader1 query-tags"
-#$ns at 1.5 "$reader1 query-tags"
+$ns at 1.5 "$reader1 query-tags"
 
 # Define node initial position in nam
-$ns initial_node_pos $n(0) 60
+$ns initial_node_pos $n(0) 20
 for {set i 1} {$i < $val(nn)} { incr i } {
 	# 30 defines the node size for nam
-	$ns initial_node_pos $n($i) 30
+	$ns initial_node_pos $n($i) 5
 }
 
 # dynamic destination setting procedure..
@@ -169,6 +172,7 @@ $ns at $val(stop) "puts \"end simulation\" ; $ns halt"
 
 proc stop {} {
 global ns tracefd namtrace
+#global ns tracefd
 $ns flush-trace
 close $tracefd
 #close $namtrace
