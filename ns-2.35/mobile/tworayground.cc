@@ -45,7 +45,7 @@
 #include <mobilenode.h>
 #include <propagation.h>
 #include <wireless-phy.h>
-#include <rfid-phy.h>
+//#include <rfid-phy.h>
 #include <tworayground.h>
 
 static class TwoRayGroundClass: public TclClass {

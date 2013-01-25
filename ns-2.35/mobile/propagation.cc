@@ -40,7 +40,6 @@
 #include <topography.h>
 #include <propagation.h>
 #include <wireless-phy.h>
-#include <rfid-phy.h>
 
 class PacketStamp;
 int

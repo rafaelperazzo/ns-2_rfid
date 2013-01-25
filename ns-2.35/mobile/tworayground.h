@@ -42,7 +42,7 @@
 
 #include <packet-stamp.h>
 #include <wireless-phy.h>
-#include <rfid-phy.h>
+//#include <rfid-phy.h>
 #include <propagation.h>
 
 class TwoRayGround : public Propagation {

@@ -47,12 +47,10 @@
 #include <topography.h>
 #include <phy.h>
 #include <wireless-phy.h>
-#include <rfid-phy.h>
 #include <packet-stamp.h>
 
 class PacketStamp;
 class WirelessPhy;
-class RfidPhy;
 /*======================================================================
    Progpagation Models
 
