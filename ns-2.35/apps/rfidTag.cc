@@ -65,7 +65,6 @@ public:
 	}
 } class_rfidTag;
 
-
 RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), tagEPC_(0), id_(0)
 {
 	bind("packetSize_", &size_);
@@ -89,6 +88,20 @@ int RfidTagAgent::command(int argc, const char*const* argv)
 }
 
 
+float RfidTagAgent::RandomFloat(float min, float max)
+{
+    // this  function assumes max > min, you may want 
+    // more robust error checking for a non-debug build
+    assert(max > min); 
+    float random = ((float) rand()) / (float) RAND_MAX;
+
+    // generate (in your case) a float between 0 and (4.5-.78)
+    // then add .78, giving you a float between .78 and 4.5
+    float range = max - min;  
+    return (random*range) + min;
+}
+
+
 void RfidTagAgent::recv(Packet* pkt, Handler*)
 {
   // Lê o conteúdo do cabeçalho IP
@@ -104,6 +117,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
   	  rfidHeader->tagEPC_ = tagEPC_;
 	  rfidHeader->id_ = hdr->id_;
   	  rfidHeader->tipo_ = FLOW_TR;
+	  rfidHeader->service_=hdr->service_;
 	  ipHeader->daddr() = hdrip->saddr();
   	  ipHeader->dport() = hdrip->sport();
 	  if (hdr->service_==SERVICE_TRACKING) {
@@ -116,13 +130,24 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
           	else { //caso seja solicitada singularização
                 	if (hdr->id_!=id_) {
                         	double tempo = Random::uniform(0,time_);
+				//float tempo = RandomFloat(0,0.4);
+				//printf("Tempo: %f\n",tempo);
                         	Scheduler& sch = Scheduler::instance();
                         	sch.schedule(target_,pktret,tempo);
                 	}
           	}
 	  }
 	  else if (hdr->service_==SERVICE_STANDARD) {
-	  
+		//criar pacote de resposta
+	        Packet* pktret = allocpkt();
+          	hdr_rfidPacket* rfidHeader = hdr_rfidPacket::access(pktret);
+          	hdr_ip* ipHeader = hdr_ip::access(pktret);
+          	rfidHeader->tagEPC_ = tagEPC_;
+          	rfidHeader->id_ = hdr->id_;
+          	rfidHeader->tipo_ = FLOW_TR;
+          	ipHeader->daddr() = hdrip->saddr();
+          	ipHeader->dport() = hdrip->sport();
+		send(pktret,0);
 	  }
   }
   else if (hdr->tipo_==FLOW_RT_ACK) { //Tag recebe um ACK
