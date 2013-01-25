@@ -82,7 +82,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
       //Scheduler& sch = Scheduler::instance();
       //printf("%f\n",sch.clock());
       //Criando Pacote
-      Packet* pkt = allocpkt(); 
+      /*Packet* pkt = allocpkt(); 
       //Criando cabeçado da camada de Rede
       hdr_ip* iph = HDR_IP(pkt);
       //Criando cabeçalho RFID
@@ -96,12 +96,14 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
       iph->daddr() = IP_BROADCAST; //Destino: broadcast
       iph->dport() = iph->sport();
       //printf("Antes de enviar pacote de requisição...\n");
-      send(pkt, (Handler*) 0);
+      send(pkt, (Handler*) 0);*/
       //printf("Requisição enviada com sucesso...\n");
+      //rs_timer_.resched(3);
+      resend();
       return (TCL_OK);
     }
     else if (strcmp(argv[1], "standard-query-tags") == 0) {
-	Packet* pkt = allocpkt(); 
+	/*Packet* pkt = allocpkt(); 
 	//Create network header
 	hdr_ip* ipHeader = HDR_IP(pkt);
 	//Create RFID header
@@ -110,11 +112,12 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
       	rfidHeader->id_ = id_; //Reader ID
       	rfidHeader->tipo_ = FLOW_RT; //flow direction
       	rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
-      	rfidHeader->service_=SERVICE_STANDARD;
+      	rfidHeader->service_=service_;
       	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
       	ipHeader->dport() = ipHeader->sport();
       	//Sends the packet
-	send(pkt, (Handler*) 0);
+	send(pkt, (Handler*) 0);*/
+	resend();
       	return (TCL_OK);
     }
   }
@@ -142,6 +145,8 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 	        rfidHeader->tagEPC_ = hdr->tagEPC_;
         	rfidHeader->id_ = hdr->id_;
 	        rfidHeader->tipo_ = FLOW_RT_ACK;
+		rfidHeader->service_=service_;
+		rfidHeader->singularization_=singularization_;
         	//hdrIp->daddr() = IP_BROADCAST;
 	        ipHeader->daddr() = hdrip->saddr();
         	ipHeader->dport() = hdrip->sport();
@@ -159,7 +164,22 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
   return;
 }
 void RfidReaderAgent::resend() {
-
+	Packet* pkt = allocpkt(); 
+        //Create network header
+        hdr_ip* ipHeader = HDR_IP(pkt);
+        //Create RFID header
+        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
+        ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
+        ipHeader->dport() = ipHeader->sport();
+        ipHeader->saddr() = here_.addr_; //Destination: broadcast
+        ipHeader->sport() = here_.port_;
+	//Sends the packet
+        send(pkt, (Handler*) 0);
 }
 
 void RetransmitTimer::expire(Event *e) {

@@ -6,8 +6,8 @@ set val(mac) Mac/802_11 ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
-set val(ifqlen) 55 ;# max packet in ifq
-set val(nn) 100 ;# number of mobilenodes
+set val(ifqlen) 10 ;# max packet in ifq
+set val(nn) 2 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 
@@ -25,7 +25,7 @@ $val(netif) set RXThresh_ 2.12249e-07
 $val(mac) set RTSThreshold_ 3000
 #DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
 $val(mac) set basicRate_ 80Kb
-$val(mac) set dataRate_ 80Kb
+$val(mac) set dataRate_ 256Kb
 
 $ns use-newtrace
 $ns trace-all $tracefd
@@ -112,7 +112,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
         $ns connect $reader1 $tag($i)
 }
 
-for {set i 1} {$i < $val(stop) } { incr i 101} {
+for {set i 2} {$i < $val(stop) } { incr i 101} {
         $ns at $i "$reader1 query-tags"
 }
 
