@@ -251,8 +251,8 @@ Mac802_11::Mac802_11() :
 		bind_bw("dataRate_", &dataRate_);
 	else
 		dataRate_ = bandwidth_;
-
-		
+	//Por Rafael
+	//bind("colisao_",&colisao_);	
 	bind_bool("bugFix_timer_", &bugFix_timer_);
 
         EOTtarget_ = 0;
@@ -1617,7 +1617,10 @@ Mac802_11::recv(Packet *p, Handler *h)
 		if(pktRx_->txinfo_.RxPr / p->txinfo_.RxPr >= p->txinfo_.CPThresh) {
 			capture(p);
 		} else {
-			collision(p);
+			//Por Rafael
+			//if (colisao_==1) {
+				collision(p);
+			//}
 		}
 	}
 }

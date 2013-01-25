@@ -376,6 +376,7 @@ public:
 	// Added by Sushmita to support event tracing
         void trace_event(char *, Packet *);
         EventTrace *et_;
+	//int colisao_;
 
 protected:
 	void	backoffHandler(void);

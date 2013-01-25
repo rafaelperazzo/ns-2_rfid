@@ -58,7 +58,7 @@ static const char rcsid[] =
 #include "lib/bsd-list.h"
 #include "phy.h"
 #include "wireless-phy.h"
-#include "rfid-phy.h"
+//#include "rfid-phy.h"
 #include "mobilenode.h"
 #include "ip.h"
 #include "dsr/hdr_sr.h"

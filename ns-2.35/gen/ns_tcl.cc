@@ -19373,7 +19373,6 @@ Mac/802_11 set PLCPDataRate_  1.0e6           ;# 1Mbps\n\
 Mac/802_11 set RTSThreshold_  0               ;# bytes\n\
 Mac/802_11 set ShortRetryLimit_       7               ;# retransmittions\n\
 Mac/802_11 set LongRetryLimit_        4               ;# retransmissions\n\
-\n\
 Mac/802_11 set bugFix_timer_ true;         # fix for when RTS/CTS not used\n\
 \n\
 Mac/802_11 set BeaconInterval_	       0.1		;# 100ms	\n\
@@ -19382,27 +19381,6 @@ Mac/802_11 set ProbeDelay_	0.0001		;# 0.1 ms\n\
 Mac/802_11 set MaxChannelTime_ 0.011		;# 11 ms\n\
 Mac/802_11 set MinChannelTime_ 0.005		; # 5 ms\n\
 Mac/802_11 set ChannelTime_ 0.12		;# 120 ms\n\
-\n\
-Mac/RFID set CWMin_         31\n\
-Mac/RFID set CWMax_         1023\n\
-Mac/RFID set SlotTime_      0.000020        ;# 20us\n\
-Mac/RFID set SIFS_          0.000010        ;# 10us\n\
-Mac/RFID set PreambleLength_        144             ;# 144 bit\n\
-Mac/RFID set PLCPHeaderLength_      48              ;# 48 bits\n\
-Mac/RFID set PLCPDataRate_  1.0e6           ;# 1Mbps\n\
-Mac/RFID set RTSThreshold_  3000               ;# bytes\n\
-Mac/RFID set ShortRetryLimit_       7               ;# retransmittions\n\
-Mac/RFID set LongRetryLimit_        4               ;# retransmissions\n\
-\n\
-Mac/RFID set bugFix_timer_ true;         # fix for when RTS/CTS not used\n\
-Mac/RFID set BeaconInterval_        0.1              ;# 100ms        \n\
-Mac/RFID set ScanType_       PASSIVE\n\
-Mac/RFID set ProbeDelay_     0.0001          ;# 0.1 ms\n\
-Mac/RFID set MaxChannelTime_ 0.011           ;# 11 ms\n\
-Mac/RFID set MinChannelTime_ 0.005           ; # 5 ms\n\
-Mac/RFID set ChannelTime_ 0.12               ;# 120 ms\n\
-Mac/RFID set basicRate_ 8e3\n\
-Mac/RFID set dataRate_ 8e3\n\
 \n\
 Mac/802_11Ext set HeaderDuration_   0.000020  ;# (SERVICE) 16bits last of PLCP header are not included\n\
 Mac/802_11Ext set SymbolDuration_   0.000004  ;# (SERVICE) 16bits last of PLCP header are not included\n\
@@ -19448,15 +19426,6 @@ Phy/WirelessPhy set Pt_ 0.28183815\n\
 Phy/WirelessPhy set freq_ 914e+6\n\
 Phy/WirelessPhy set L_ 1.0  \n\
 \n\
-Phy/RfidPhy set CPThresh_ 10.0\n\
-Phy/RfidPhy set CSThresh_ 1.559e-11\n\
-Phy/RfidPhy set RXThresh_ 2.12249e-07\n\
-Phy/RfidPhy set bandwidth_ 2e6\n\
-Phy/RfidPhy set Pt_ 0.28\n\
-Phy/RfidPhy set freq_ 914e+6\n\
-Phy/RfidPhy set L_ 1.0  \n\
-\n\
-Phy/WirelessPhyExt set CSThresh_ 6.30957e-12           ;# -82 dBm\n\
 Phy/WirelessPhyExt set noise_floor_ 7.96159e-14        ;# -101 dBm\n\
 Phy/WirelessPhyExt set PowerMonitorThresh_ 2.653e-14   ;# -105.7 dBm (noise_floor_ / 3)\n\
 Phy/WirelessPhyExt set Pt_  0.1\n\

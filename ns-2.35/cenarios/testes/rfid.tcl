@@ -6,8 +6,8 @@ set val(mac) Mac/802_11 ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
-set val(ifqlen) 10 ;# max packet in ifq
-set val(nn) 2 ;# number of mobilenodes
+set val(ifqlen) 10000 ;# max packet in ifq
+set val(nn) 50 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 
@@ -95,7 +95,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 
 #Definindo parametros dos agentes
 $reader1 set id_ 200
-$reader1 set singularization_ 1
+$reader1 set singularization_ 0
 $reader1 set service_ 1
 
 #CONECTANDO NOS AOS AGENTES
