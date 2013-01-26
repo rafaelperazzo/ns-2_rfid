@@ -6,8 +6,8 @@ set val(mac) Mac/802_11 ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
-set val(ifqlen) 10000 ;# max packet in ifq
-set val(nn) 50 ;# number of mobilenodes
+set val(ifqlen) 50 ;# max packet in ifq
+set val(nn) 100 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 

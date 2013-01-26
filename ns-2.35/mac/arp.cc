@@ -121,9 +121,9 @@ ARPTable::command(int argc, const char*const* argv)
 int
 ARPTable::arpresolve(nsaddr_t dst, Packet *p, LL *ll)
 {
-	//hdr_cmn *ch = HDR_CMN(p);
-	//mac_->hdr_dst((char*) HDR_MAC(p), ch->next_hop());
-	//return 0;
+	hdr_cmn *ch = HDR_CMN(p);
+	mac_->hdr_dst((char*) HDR_MAC(p), ch->next_hop());
+	return 0;
 	ARPEntry *llinfo ;
 	
 	assert(initialized());

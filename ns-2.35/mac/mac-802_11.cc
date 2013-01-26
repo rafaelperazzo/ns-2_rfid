@@ -1619,7 +1619,7 @@ Mac802_11::recv(Packet *p, Handler *h)
 		} else {
 			//Por Rafael
 			//if (colisao_==1) {
-				collision(p);
+				//collision(p);
 			//}
 		}
 	}
