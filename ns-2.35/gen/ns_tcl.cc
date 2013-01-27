@@ -19421,7 +19421,7 @@ Phy set debug_ false\n\
 Phy/WirelessPhy set CPThresh_ 10.0\n\
 Phy/WirelessPhy set CSThresh_ 1.559e-11\n\
 Phy/WirelessPhy set RXThresh_ 3.652e-10\n\
-Phy/WirelessPhy set bandwidth_ 2e6\n\
+Phy/WirelessPhy set bandwidth_ 2e3\n\
 Phy/WirelessPhy set Pt_ 0.28183815\n\
 Phy/WirelessPhy set freq_ 914e+6\n\
 Phy/WirelessPhy set L_ 1.0  \n\

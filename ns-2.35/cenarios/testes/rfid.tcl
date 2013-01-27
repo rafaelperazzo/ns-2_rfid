@@ -2,12 +2,12 @@
 set val(chan) Channel/WirelessChannel ;# channel type
 set val(prop) Propagation/TwoRayGround ;# radio-propagation model: TwoRayGround/FreeSpace
 set val(netif) Phy/WirelessPhy ;# network interface type
-set val(mac) Mac/802_11 ;# MAC type
+set val(mac) Mac ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 50 ;# max packet in ifq
-set val(nn) 100 ;# number of mobilenodes
+set val(nn) 2 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 
@@ -19,13 +19,14 @@ set namtrace [open rfid.nam w]
 
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
 $val(netif) set Pt_ 0.28
-$val(netif) set RXThresh_ 2.12249e-07
-
+$val(netif) set RXThresh_ 7.64097e-06
+$val(netif) set bandwidth_ 10e6
 #DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
-$val(mac) set RTSThreshold_ 3000
+#$val(mac) set RTSThreshold_ 3000
 #DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
-$val(mac) set basicRate_ 80Kb
-$val(mac) set dataRate_ 256Kb
+#$val(mac) set basicRate_ 10Kb
+#$val(mac) set dataRate_ 10Kb
+$val(mac) set bandwidth_ 1e3
 
 $ns use-newtrace
 $ns trace-all $tracefd
@@ -54,7 +55,7 @@ $ns node-config -adhocRouting $val(rp) \
 -topoInstance $topo \
 -agentTrace ON \
 -routerTrace OFF \
--macTrace ON \
+-macTrace OFF \
 -movementTrace OFF
 #-channel $chan_1_
 
@@ -75,8 +76,8 @@ $rng2 seed 0
 #puts "[$rng2 uniform 0 20]"
 #puts "[$rng2 uniform 0 20]"
 for {set i 1} {$i < $val(nn) } { incr i } {
-      $n($i) set X_ [$rng1 uniform 0 20]
-      $n($i) set Y_ [$rng2 uniform 0 20]
+      $n($i) set X_ [$rng1 uniform 13 13]
+      $n($i) set Y_ [$rng2 uniform 13 13]
       #puts "[$rng2 uniform 0 20]"
       $n($i) set Z_ 0.0
 }
