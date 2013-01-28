@@ -64,7 +64,7 @@ public:
 } class_rfidReader;
 
 
-RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), rs_timer_(this),state_(0)
+RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), rs_timer_(this),state_(0), command_(0)
 {
 	bind("packetSize_", &size_);
 	bind("tagEPC_",&tagEPC_);
@@ -79,44 +79,11 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 {
   if (argc == 2) {
     if (strcmp(argv[1], "query-tags") == 0) {
-      //Scheduler& sch = Scheduler::instance();
-      //printf("%f\n",sch.clock());
-      //Criando Pacote
-      /*Packet* pkt = allocpkt(); 
-      //Criando cabeçado da camada de Rede
-      hdr_ip* iph = HDR_IP(pkt);
-      //Criando cabeçalho RFID
-      hdr_rfidPacket *ph = hdr_rfidPacket::access(pkt);
-      //Preparando cabeçalho
-      ph->id_ = id_; //ID do leitor
-      ph->tipo_ = FLOW_RT; //Tipo de fluxo: LEITOR-TAG
-      ph->singularization_ = singularization_; //Responde ou não imediatamente
-      //if (service_==1) { ph->service_=1; } //Tipo de serviço: Responde apenas requisições de leitores diferentes
-      ph->service_=service_;
-      iph->daddr() = IP_BROADCAST; //Destino: broadcast
-      iph->dport() = iph->sport();
-      //printf("Antes de enviar pacote de requisição...\n");
-      send(pkt, (Handler*) 0);*/
-      //printf("Requisição enviada com sucesso...\n");
       //rs_timer_.resched(3);
       resend();
       return (TCL_OK);
     }
     else if (strcmp(argv[1], "standard-query-tags") == 0) {
-	/*Packet* pkt = allocpkt(); 
-	//Create network header
-	hdr_ip* ipHeader = HDR_IP(pkt);
-	//Create RFID header
-	hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
-	//Prepating headers
-      	rfidHeader->id_ = id_; //Reader ID
-      	rfidHeader->tipo_ = FLOW_RT; //flow direction
-      	rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
-      	rfidHeader->service_=service_;
-      	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
-      	ipHeader->dport() = ipHeader->sport();
-      	//Sends the packet
-	send(pkt, (Handler*) 0);*/
 	resend();
       	return (TCL_OK);
     }
