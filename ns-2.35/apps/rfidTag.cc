@@ -65,7 +65,7 @@ public:
 	}
 } class_rfidTag;
 
-RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), tagEPC_(0), id_(0)
+RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), tagEPC_(0), id_(0), state_(0)
 {
 	bind("packetSize_", &size_);
 	bind("id_",&id_);

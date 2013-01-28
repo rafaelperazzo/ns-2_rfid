@@ -76,9 +76,11 @@ public:
 	int slot_; //Slot number
 	int rng16_; //Random number
 	int memory_; //Optional memory
+	int state_; //Tag state
 	enum FLUXO {FLOW_RT=0, FLOW_TR=1,FLOW_RT_ACK=2}flow;
         enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2}service;
         enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
+	enum TAG_STATE{T_READY=0,T_ARBITRATE=1,T_REPLY=2,T_ACKNOWLEDGED=3,T_OPEN=4,T_SECURED=5,T_KILLED=6}tag_state;
 	
 };
 

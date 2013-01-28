@@ -83,9 +83,11 @@ public:
 	int service_;
 	int qValue_;
 	int memory_;
+	int state_;
 	enum FLUXO {FLOW_RT=0, FLOW_TR=1,FLOW_RT_ACK=2}flow;
 	enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2}service;
 	enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
+	enum READER_STATE{R_SELECT=0,R_INVENTORY=1,R_ACCESS=2}reader_state;
 	void resend();
 protected: 	
 	RetransmitTimer rs_timer_;

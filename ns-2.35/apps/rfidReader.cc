@@ -64,7 +64,7 @@ public:
 } class_rfidReader;
 
 
-RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), rs_timer_(this)
+RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), rs_timer_(this),state_(0)
 {
 	bind("packetSize_", &size_);
 	bind("tagEPC_",&tagEPC_);
