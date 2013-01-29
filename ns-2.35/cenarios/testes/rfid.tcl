@@ -7,30 +7,32 @@ set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 50 ;# max packet in ifq
-set val(nn) 2 ;# number of mobilenodes
+set val(nn) 10 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
+#set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 
 set val(stop) 100 ;# time of simulation end
 
 set ns [new Simulator]
 set tracefd [open rfid.tr w]
-set namtrace [open rfid.nam w] 
+#set namtrace [open rfid.nam w] 
 
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
 $val(netif) set Pt_ 0.28
 $val(netif) set RXThresh_ 7.64097e-06
-$val(netif) set bandwidth_ 10e6
+#$val(netif) set RXThresh_ 2.12249e-07
+$val(netif) set bandwidth_ 1e3
 #DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
 #$val(mac) set RTSThreshold_ 3000
 #DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
 #$val(mac) set basicRate_ 10Kb
 #$val(mac) set dataRate_ 10Kb
-$val(mac) set bandwidth_ 1e3
+#$val(mac) set bandwidth_ 3e4
 
 $ns use-newtrace
 $ns trace-all $tracefd
-$ns namtrace-all-wireless $namtrace $val(x) $val(y)
+#$ns namtrace-all-wireless $namtrace $val(x) $val(y)
 
 # set up topography object
 set topo [new Topography]
@@ -76,8 +78,8 @@ $rng2 seed 0
 #puts "[$rng2 uniform 0 20]"
 #puts "[$rng2 uniform 0 20]"
 for {set i 1} {$i < $val(nn) } { incr i } {
-      $n($i) set X_ [$rng1 uniform 13 13]
-      $n($i) set Y_ [$rng2 uniform 13 13]
+      $n($i) set X_ [$rng1 uniform 8 12]
+      $n($i) set Y_ [$rng2 uniform 8 12]
       #puts "[$rng2 uniform 0 20]"
       $n($i) set Z_ 0.0
 }
@@ -97,7 +99,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 #Definindo parametros dos agentes
 $reader1 set id_ 200
 $reader1 set singularization_ 0
-$reader1 set service_ 1
+$reader1 set service_ 2
 
 #CONECTANDO NOS AOS AGENTES
 for {set i 1} {$i < $val(nn) } { incr i } {
@@ -114,7 +116,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 }
 
 for {set i 2} {$i < $val(stop) } { incr i 101} {
-        $ns at $i "$reader1 query-tags"
+        $ns at $i "$reader1 standard-query-tags"
 }
 
 #$ns at 1.0 "$reader1 query-tags"
@@ -134,9 +136,9 @@ for {set i 1} {$i < $val(nn)} { incr i } {
 #$ns at 2100.0 "destination"
 #$ns at 2400.0 "destination"
 #$ns at 2700.0 "destination"
-for {set i 1} {$i < $val(stop) } { incr i 10} {
-        $ns at $i "destination"
-}
+#for {set i 1} {$i < $val(stop) } { incr i 10} {
+#        $ns at $i "destination"
+#}
 
 proc destination {} {
       set rng1 [new RNG]
@@ -166,8 +168,8 @@ $ns at $val(stop) "stop"
 $ns at $val(stop) "puts \"end simulation\" ; $ns halt"
 
 proc stop {} {
-global ns tracefd namtrace
-#global ns tracefd
+#global ns tracefd namtrace
+global ns tracefd
 $ns flush-trace
 close $tracefd
 #close $namtrace

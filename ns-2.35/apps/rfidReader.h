@@ -66,7 +66,7 @@ class RfidReaderAgent;
 
 class RetransmitTimer : public TimerHandler {
         public:
-                RetransmitTimer(RfidReaderAgent *a) : TimerHandler() { a_=a; }
+                RetransmitTimer(RfidReaderAgent *a) : TimerHandler() { a_ = a; }
 	protected:
                 virtual void expire(Event *e);
                 RfidReaderAgent *a_;
@@ -81,18 +81,30 @@ public:
 	int tagEPC_;
 	int singularization_;
 	int service_;
-	int qValue_;
-	int memory_;
 	int state_;
+	int qValue_;
 	int command_;
+	double Qfp_;
+	int memory_;
+	float rng16_;
+	int tag_;
+	int counter_;
+	double c_;
 	enum FLUXO {FLOW_RT=0, FLOW_TR=1,FLOW_RT_ACK=2}flow;
 	enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2}service;
 	enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
 	enum READER_STATE{RS_SELECT=0,RS_INVENTORY=1,RS_ACCESS=2}reader_state;
-	enum READER_COMMAND{RC_QUERY=0,RC_QURYADJUST=1, RC_QUERYREP=2,RC_ACK=3,RC_NAK=4}reader_command;
+	enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4, TC_REPLY=5}reader_command;
 	void resend();
+	void send_query();
+	void send_query_ajust();
+	void send_query_reply();
+	int getCounter();
+	int getIP();
+	void start_sing();
 protected: 	
 	RetransmitTimer rs_timer_;
+	RetransmitTimer rs_timer_restart_;
 };
 
 //#endif // ns_rfidReader_h

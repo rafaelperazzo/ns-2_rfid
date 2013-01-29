@@ -18,7 +18,7 @@ struct hdr_rfidPacket {
 	0 para responder todas as requisições do leitor
 	1 para responder requisições de leitores diferentes	*/
 	int ack_;
-	int rng16_;
+	float rng16_;
 	int qValue_;
 	int command_;
 	// Header access methods

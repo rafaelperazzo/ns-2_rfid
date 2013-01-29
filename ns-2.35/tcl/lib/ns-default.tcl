@@ -834,6 +834,8 @@ Agent/RfidReader set service_ 0
 Agent/RfidReader set qValue_ 4
 Agent/RfidReader set memory_ 0
 Agent/RfidReader set rng16_ 0
+Agent/RfidReader set c_ 0.3
+Agent/RfidReader set Qfp_ 4.0
 
 
 Agent/RfidTag set packetSize_ 4
@@ -843,9 +845,9 @@ Agent/RfidTag set singularization_ 1
 Agent/RfidTag set service_ 0
 Agent/RfidTag set kill_ 0
 Agent/RfidTag set time_ 1
-Agent/RfidTag set rng16_ 0
+#Agent/RfidTag set rng16_ 0
 Agent/RfidTag set memory_ 0
-Agent/RfidTag set slot_ 0
+#Agent/RfidTag set slot_ 0
 
 Agent/UDP set packetSize_ 1000
 Agent/UDP instproc done {} { }

@@ -67,6 +67,8 @@ public:
 	RfidTagAgent();
 	virtual int command(int argc, const char*const* argv);
 	float RandomFloat(float min, float max);
+	int RandomInt(int min, int max);
+	void sendPacket(Packet* pkt, int c);
 	virtual void recv(Packet*, Handler*);
 	int id_; //Stores the last received READER ID
 	int tagEPC_; //Tag EPC
@@ -74,15 +76,20 @@ public:
 	int kill_; //Kill flag
 	int time_; //Random wait time for send a packet
 	int slot_; //Slot number
-	int rng16_; //Random number
+	float rng16_; //Random number
 	int memory_; //Optional memory
 	int state_; //Tag state
 	enum FLUXO {FLOW_RT=0, FLOW_TR=1,FLOW_RT_ACK=2}flow;
         enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2}service;
         enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
 	enum TAG_STATE{T_READY=0,T_ARBITRATE=1,T_REPLY=2,T_ACKNOWLEDGED=3,T_OPEN=4,T_SECURED=5,T_KILLED=6}tag_state;
-        enum READER_COMMAND{RC_QUERY=0,RC_QURYADJUST=1, RC_QUERYREP=2,RC_ACK=3,RC_NAK=4}reader_command;
-	
+        enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4,TC_REPLY=5}reader_command;
+	double unifRand();
+	double unifRand(double a, double b);
+	long unifRand(long n);
+	void seed();
+	void seed(double s);
+	void updateSlot();
 };
 
 #endif // ns_rfidTag_h
