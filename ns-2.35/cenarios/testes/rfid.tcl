@@ -7,7 +7,7 @@ set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 50 ;# max packet in ifq
-set val(nn) 10 ;# number of mobilenodes
+set val(nn) 5 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography

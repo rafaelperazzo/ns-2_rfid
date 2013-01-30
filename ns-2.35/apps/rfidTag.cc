@@ -1,7 +1,7 @@
 /*
  * rfidTag.cc
  * Copyright (C) 2000 by the University of Southern California
- * $Id: ping.cc,v 1.8 2005/08/25 18:58:01 johnh Exp $
+ * $Id: rfidTag.cc,v 1.8 2005/08/25 18:58:01 johnh Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License,
@@ -148,9 +148,6 @@ long RfidTagAgent::unifRand(long n)
 // Reset the random number generator with the system clock.
 void RfidTagAgent::seed()
 {
-    	//struct timespec now;
-	//clock_gettime(CLOCK_MONOTONIC, &now);
-	//srand(now.tv_sec*1000000000LL + now.tv_nsec);
 	srand(tagEPC_*(unsigned)time(0)+Scheduler::instance().clock()*memory_);
 }
 
@@ -167,7 +164,6 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
   hdr_ip* hdrip = hdr_ip::access(pkt);
   // Lê o conteúdo do cabeçalho do pacote RFID
   hdr_rfidPacket* hdr = hdr_rfidPacket::access(pkt);
-  //printf("Chegou um pacote enderecado a: %d\n",hdrip->daddr());
   if (hdr->tipo_==FLOW_RT) { //Responde apenas a requisições de leitores
 	  if (hdr->service_==SERVICE_TRACKING) {
 	  	//criar pacote de resposta
@@ -189,8 +185,6 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
           	else { //caso seja solicitada singularização
                 	if (hdr->id_!=id_) {
                         	double tempo = Random::uniform(0,time_);
-				//float tempo = RandomFloat(0,0.4);
-				//printf("Tempo: %f\n",tempo);
                         	Scheduler& sch = Scheduler::instance();
                         	sch.schedule(target_,pktret,tempo);
                 	}
@@ -204,15 +198,12 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		*Version 1.2.0
 		*/
 		//criar pacote de resposta
-                //printf("Chegou um pacote para a tag: %d - destinatario: %d\n",here_.addr_,hdrip->daddr());
 		memory_=hdr->qValue_;
-		//printf("[TAG-q]%d\n",memory_);
 	        if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {
 			updateSlot();
 			if (slot_==0) {
 	                        state_=T_READY;
         	                sendPacket(pkt,RC_QUERY);
-				//printf("Respondido [%d]\n",tagEPC_);
                         }
                         else {
                 	 	state_=T_ARBITRATE;
@@ -224,7 +215,6 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 			if (slot_==0) {
 		                state_=T_READY;
 		                sendPacket(pkt,RC_QUERYADJUST);
-				//printf("Pronto para QueryAdjust\n");
        			}
        			else {
                			state_=T_ARBITRATE;
@@ -247,7 +237,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
                         	else {
                                 	state_=T_ARBITRATE;
                         	}
-			} 
+			}
 		}
 	}
   }
@@ -263,7 +253,6 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 
 void RfidTagAgent::updateSlot() {
 	seed();
-        //rng16_=unifRand(0,pow(2,memory_)-1);
 	rng16_=Random::uniform(0,pow(2,memory_)-1);
         if (state_!=T_ACKNOWLEDGED) {
 		slot_=round(rng16_);
@@ -283,15 +272,12 @@ void RfidTagAgent::sendPacket(Packet* pkt, int command) {
         rfidHeader->id_ = hdr->id_;
         rfidHeader->tipo_ = FLOW_TR;
 	rfidHeader->service_ = hdr->service_;
-	rfidHeader->singularization_ = hdr->singularization_;
-	//if (rng16_==0)
-	//	rng16_=Random::uniform(0,pow(2,hdr->qValue_)-1);
+	rfidHeader->singularization_ = hdr->singularization_
 	rfidHeader->command_=command;
 	rfidHeader->rng16_=rng16_;
         ipHeader->daddr() = hdrip->saddr();
         ipHeader->dport() = hdrip->sport();
 	ipHeader->saddr() = here_.addr_;
 	ipHeader->sport() = here_.port_;
-       	//printf("Respondendo para: %d\n",hdrip->saddr());
 	send(pktret,0);
 }
