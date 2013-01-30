@@ -133,7 +133,6 @@ double RfidTagAgent::unifRand(double a, double b)
 // return a uniform random value in [1,...,n]
 long RfidTagAgent::unifRand(long n)
 {
-    
     if (n < 0) n = -n;
     if (n==0) return 0;
     /* There is a slight error in that this code can produce a return value of n+1
@@ -272,7 +271,7 @@ void RfidTagAgent::sendPacket(Packet* pkt, int command) {
         rfidHeader->id_ = hdr->id_;
         rfidHeader->tipo_ = FLOW_TR;
 	rfidHeader->service_ = hdr->service_;
-	rfidHeader->singularization_ = hdr->singularization_
+	rfidHeader->singularization_ = hdr->singularization_;
 	rfidHeader->command_=command;
 	rfidHeader->rng16_=rng16_;
         ipHeader->daddr() = hdrip->saddr();
