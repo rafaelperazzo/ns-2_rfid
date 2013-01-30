@@ -836,6 +836,7 @@ Agent/RfidReader set memory_ 0
 Agent/RfidReader set rng16_ 0
 Agent/RfidReader set c_ 0.3
 Agent/RfidReader set Qfp_ 4.0
+Agent/RfidReader set t2_ 0.0025
 
 
 Agent/RfidTag set packetSize_ 4

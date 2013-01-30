@@ -2,7 +2,7 @@
 /*
  * rfidReader.cc
  * Copyright (C) 2000 by the University of Southern California
- * $Id: ping.cc,v 1.8 2005/08/25 18:58:01 johnh Exp $
+ * $Id: rfidReader.cc,v 1.8 2005/08/25 18:58:01 johnh Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License,
@@ -49,7 +49,7 @@
  * File: Code for a new 'RfidReader' Agent Class for the ns
  *       network simulator
  * Author: Rafael Perazzo Barbosa Mota (perazzo@ime.usp.br), Setembro 2012
- *
+ * Last update: 30/JAN/2012
  */
 
 #include "rfidReader.h"
@@ -75,6 +75,7 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 	bind("memory_",&memory_);
 	bind("qValue_",&qValue_);
 	bind("c_",&c_);
+	bind("t2_",&t2_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -85,11 +86,8 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
       return (TCL_OK);
     }
     else if (strcmp(argv[1], "standard-query-tags") == 0) {
-	//while (qValue_>0) {
-		send_query();
-		//Scheduler::instance().schedule(0.0025);
-		rs_timer_.resched(0.0025); //Wait for tags responses
-	//}
+	send_query();
+	rs_timer_.resched(t2_); //Wait for tags responses
 	return (TCL_OK);
     }
   }
@@ -129,14 +127,15 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 	}
   }
   else if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_STANDARD)) {
-	//printf("SERVICE STANDARD: RNG16(%f)!!\n",hdr->rng16_);
-	counter_++;
+	if (hdr->command_!=TC_REPLY) { //SINGULARIZATION
+		counter_++;
+	}
 	tagEPC_=hdr->tagEPC_;
-	if (hdr->command_==TC_REPLY) {
+	if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
 		printf("Tag [%d] identificada\n",hdr->tagEPC_);
 		counter_=0;
 	}
-	//printf("respondeu: Ip da tag: %d\n",tagEPC_);
+
   }
   else if(hdr->tipo_==FLOW_RT){
 	printf("Leitor (NÃO IDENTIFICADO) recebeu RESPOSTA de (%i)\n",hdr->tagEPC_);
@@ -209,7 +208,6 @@ void RfidReaderAgent::send_query_ajust() {
         ipHeader->sport() = here_.port_;
         //Sends the packet
         send(pkt, (Handler*) 0);
-	//Packet::free(pkt);
 }
 
 void RfidReaderAgent::send_query_reply() {
@@ -228,15 +226,32 @@ void RfidReaderAgent::send_query_reply() {
         rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=tagEPC_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
-	//printf("Preparando ACK para o destino: %d\n",ipHeader->daddr());
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         //Sends the packet
 	send(pkt, (Handler*) 0);
-	rfidHeader->tagEPC_=IP_BROADCAST;
-	//send(pkt, (Handler*) 0);
-	//printf("Enviado ACK para tag(%d) \n",ipHeader->daddr());
-	//Packet::free(pkt);
 }
+
+void RfidReaderAgent::send_query_reply_update_slot() {
+
+        Packet* pkt = allocpkt(); 
+        //Create network header
+        hdr_ip* ipHeader = HDR_IP(pkt);
+        //Create RFID header
+        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
+        rfidHeader->command_=RC_QUERYREPLY;
+        rfidHeader->qValue_=qValue_;
+        rfidHeader->tagEPC_=IP_BROADCAST;
+        ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
+        ipHeader->saddr() = here_.addr_; //Source: reader ip
+        //Sends the packet
+        send(pkt, (Handler*) 0); 
+}
+
 
 int RfidReaderAgent::getCounter() {
 	return (counter_);
@@ -258,60 +273,39 @@ void RfidReaderAgent::start_sing() {
                 printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
                 send_query_ajust();
 		if (qValue_==0) return;
-		else 
-			rs_timer_.resched(0.0025);
+		else
+			rs_timer_.resched(t2_);
         }
         if (counter_==1) {
                 printf("APENAS UMA TAG RESPONDEU!!\n");
-		send_query_ajust();
-		//send_query();
-		//rs_timer_.cancel();
-		//rs_timer_.resched(0.0025);
-                //printf("Depois do query reply...\n");
+		counter_=0;
+		send_query_reply();
+		rs_timer_.resched(t2_);
+		send_query_reply_update_slot();
+		rs_timer_restart_.resched(t2_);
         }
 	 if (counter_>1) {
-                printf("COLISÃO - MAIS DE UMA TAG RESPONDEU!!\n");
+                printf("COLISÃO - MAIS DE UMA TAG RESPONDEU(%d)!!\n",counter_);
                 Qfp_=fmin(15,Qfp_ + c_);
                 if (Qfp_<0) {
                         Qfp_=0;
                 }
                 qValue_=round(Qfp_);
                 printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
-                send_query_ajust();
+                counter_=0;
+		send_query_ajust();
 		if (qValue_==15) return;
-		else 
-			rs_timer_.resched(0.0025);
+		else
+			rs_timer_.resched(t2_);
         }
-
-
 }
 
 void RetransmitTimer::expire(Event *e) {
-	//printf("ultima tag recebida: %d\n",a_->tagEPC_);
-	/*if (a_->counter_==0) {
-		printf("NENHUMA TAG RESPONDEU!!\n");
-		a_->Qfp_=fmax(0,a_->Qfp_ - a_->c_);
-		if (a_->Qfp_>15) {
-                        a_->Qfp_=15;
-                }
-		a_->qValue_=round(a_->Qfp_);
-		printf("Qfp=%1f - Q=%d\n",a_->Qfp_,a_->qValue_);
-		a_->send_query_ajust();
-	}
-	if (a_->counter_==1) {
-		printf("APENAS UMA TAG RESPONDEU!!\n");
-		a_->send_query_reply();
-		//printf("Depois do query reply...\n");
-	}
-	if (a_->counter_>1) {
-		printf("COLISÃO - MAIS DE UMA TAG RESPONDEU!!\n");
-		a_->Qfp_=fmin(15,a_->Qfp_ + a_->c_);
-		if (a_->Qfp_<0) {
-			a_->Qfp_=0;
-		}
-		a_->qValue_=round(a_->Qfp_);
-		printf("Qfp=%1f - Q=%d\n",a_->Qfp_,a_->qValue_);
-		a_->send_query_ajust();
-	}*/
 	a_->start_sing();
 }
+
+void RestartTimer::expire(Event *e) {
+        a_->send_query();
+	a_->rs_timer_.resched(a_->t2_);
+}
+

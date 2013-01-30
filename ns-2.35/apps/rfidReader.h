@@ -72,6 +72,14 @@ class RetransmitTimer : public TimerHandler {
                 RfidReaderAgent *a_;
  };
 
+class RestartTimer : public TimerHandler {
+        public:
+                RestartTimer(RfidReaderAgent *a) : TimerHandler() { a_ = a; }
+        protected:
+                virtual void expire(Event *e);
+                RfidReaderAgent *a_;
+ };
+
 class RfidReaderAgent : public Agent {
 public:
 	RfidReaderAgent();
@@ -102,9 +110,10 @@ public:
 	int getCounter();
 	int getIP();
 	void start_sing();
-protected: 	
+	void send_query_reply_update_slot();
+	double t2_;
 	RetransmitTimer rs_timer_;
-	RetransmitTimer rs_timer_restart_;
+	RestartTimer rs_timer_restart_;
 };
 
 //#endif // ns_rfidReader_h

@@ -151,7 +151,7 @@ void RfidTagAgent::seed()
     	//struct timespec now;
 	//clock_gettime(CLOCK_MONOTONIC, &now);
 	//srand(now.tv_sec*1000000000LL + now.tv_nsec);
-	srand(tagEPC_*(unsigned)time(0)+Scheduler::instance().clock()/memory_);
+	srand(tagEPC_*(unsigned)time(0)+Scheduler::instance().clock()*memory_);
 }
 
 // Reset the random number generator with the system clock.
@@ -196,12 +196,18 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
                 	}
           	}
 	  }
-	  else if (hdr->service_==SERVICE_STANDARD) {
+	  else if (hdr->service_==SERVICE_STANDARD) { 
+		/*
+		*EPCGLOBAL Radio-Frequency Identity Protocols
+ 		*Class-1 Generation-2 UHF RFID
+		*Protocol for Communications at 860 MHz – 960 MHz
+		*Version 1.2.0
+		*/
 		//criar pacote de resposta
                 //printf("Chegou um pacote para a tag: %d - destinatario: %d\n",here_.addr_,hdrip->daddr());
 		memory_=hdr->qValue_;
 		//printf("[TAG-q]%d\n",memory_);
-	        if (hdr->command_==RC_QUERY) {
+	        if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {
 			updateSlot();
 			if (slot_==0) {
 	                        state_=T_READY;
@@ -213,7 +219,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
                         }
 
 		}
-		else if (hdr->command_==RC_QUERYADJUST) {
+		else if ((hdr->command_==RC_QUERYADJUST)&&(state_!=T_ACKNOWLEDGED)) {
 		     	updateSlot();
 			if (slot_==0) {
 		                state_=T_READY;
@@ -225,18 +231,18 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		        }
 		}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==tagEPC_)) {
-			printf("RECEBIDO O ACK! ENVIANDO O EPC\n");
-			sendPacket(pkt,TC_REPLY);
 			state_=T_ACKNOWLEDGED;
+			slot_--;
+		        printf("(TAG IDENTIFICADA) [%d] estado(%d): valor do slot : %d\n",here_.addr_,state_,slot_);
+			sendPacket(pkt,TC_REPLY);
 	  	}
-		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==IP_BROADCAST)) {
+		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==IP_BROADCAST)&&(slot_>0)) {
 			if (state_!=T_ACKNOWLEDGED) {
-				printf("Entrou no IP_BROADCAST\n");
 				slot_=slot_-1;
+			        printf("tag [%d] diminui o slot para (%d)\n",here_.addr_,slot_);
 				if (slot_==0) {
                 	                state_=T_READY;
                         	        sendPacket(pkt,RC_QUERYREPLY);
-                                	//printf("Pronto para QueryReply\n");
                         	}
                         	else {
                                 	state_=T_ARBITRATE;
@@ -257,9 +263,12 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 
 void RfidTagAgent::updateSlot() {
 	seed();
-        rng16_=unifRand(0,pow(2,memory_)-1);
-        slot_=round(rng16_);
-        printf("Slot[%d]: %d\n",here_.addr_,slot_);
+        //rng16_=unifRand(0,pow(2,memory_)-1);
+	rng16_=Random::uniform(0,pow(2,memory_)-1);
+        if (state_!=T_ACKNOWLEDGED) {
+		slot_=round(rng16_);
+	}
+        printf("tag [%d] de estado (%d) atualizou o slot para:  %d\n",here_.addr_,state_,slot_);
 }
 
 void RfidTagAgent::sendPacket(Packet* pkt, int command) {
