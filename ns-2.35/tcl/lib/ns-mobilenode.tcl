@@ -197,6 +197,11 @@ Node/MobileNode instproc add-target { agent port } {
 	if {$aodvonly != -1 } {
 		$agent if-queue [$self set ifq_(0)]   ;# ifq between LL and MAC
 	}
+	set rfidreaderonly [string first "RFIDREADER" [$agent info class]] 
+        if {$aodvonly != -1 } {
+                $agent if-queue [$self set ifq_(0)]   ;# ifq between LL and MAC
+        }
+
 	
 	#<zheng: add>
 	# Special processing for ZBR
@@ -220,8 +225,10 @@ Node/MobileNode instproc add-target { agent port } {
 		#
 		if {$newapi != ""} {
 			set sndT [$self mobility-trace Send "AGT"]
+			#set sndT [$self mobility-trace Send "RDR"]
 		} else {
 			set sndT [cmu-trace Send AGT $self]
+			#set sndT [cmu-trace Send RDR $self]
 		}
 		if { $namfp != "" } {
 			$sndT namattach $namfp
@@ -233,8 +240,10 @@ Node/MobileNode instproc add-target { agent port } {
 		#
 		if {$newapi != ""} {
 			set rcvT [$self mobility-trace Recv "AGT"]
+			#set rcvT [$self mobility-trace Recv "RDR"]
 		} else {
 			set rcvT [cmu-trace Recv AGT $self]
+			#set rcvT [cmu-trace Recv RDR $self]
 		}
 		if { $namfp != "" } {
 			$rcvT namattach $namfp

@@ -6,8 +6,8 @@ set val(mac) Mac ;# MAC type
 set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
-set val(ifqlen) 50 ;# max packet in ifq
-set val(nn) 5 ;# number of mobilenodes
+set val(ifqlen) 1000 ;# max packet in ifq
+set val(nn) 20 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography
@@ -22,14 +22,14 @@ set tracefd [open rfid.tr w]
 $val(netif) set Pt_ 0.28
 $val(netif) set RXThresh_ 7.64097e-06
 #$val(netif) set RXThresh_ 2.12249e-07
-$val(netif) set bandwidth_ 1e3
+#$val(netif) set bandwidth_ 1e3
 #DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
 #$val(mac) set RTSThreshold_ 3000
 #DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
 #$val(mac) set basicRate_ 10Kb
 #$val(mac) set dataRate_ 10Kb
 #$val(mac) set bandwidth_ 3e4
-
+#$val(mac) set abstract_ true
 $ns use-newtrace
 $ns trace-all $tracefd
 #$ns namtrace-all-wireless $namtrace $val(x) $val(y)

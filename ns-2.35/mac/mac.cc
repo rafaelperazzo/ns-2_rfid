@@ -153,7 +153,7 @@ void Mac::sendUp(Packet* p)
 			drop(p);
 		}else {
 			//Dont want to creat a trace
-			Packet::free(p);
+			Packet::free(p); 
 		}
 		return;
 	}
@@ -173,7 +173,7 @@ void Mac::sendDown(Packet* p)
 void Mac::resume(Packet* p)
 {
 	if (p != 0)
-		drop(p);
+		drop(p); 
 	state(MAC_IDLE);
 	callback_->handle(&intr_);
 }

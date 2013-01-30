@@ -284,7 +284,7 @@ void RfidReaderAgent::start_sing() {
 		send_query_reply_update_slot();
 		rs_timer_restart_.resched(t2_);
         }
-	 if (counter_>1) {
+	if (counter_>1) {
                 printf("COLISÃO - MAIS DE UMA TAG RESPONDEU(%d)!!\n",counter_);
                 Qfp_=fmin(15,Qfp_ + c_);
                 if (Qfp_<0) {

@@ -643,6 +643,9 @@ Simulator instproc create-wireless-node args {
 			    Simulator set IMEPFlag_ ON
 			    set ragent [$self create-tora-agent $node]
 		    }
+		    #RFIDREADER {
+		    #	    set ragent [$self create-wrfidreader-agent $node]
+		    #}
 		    DIFFUSION/RATE {
 			    eval $node addr $args
 			    set ragent [$self create-diffusion-rate-agent $node]
@@ -866,6 +869,14 @@ Simulator instproc create-aomdv-agent { node } {
 	$node set ragent_ $ragent
 	return $ragent
 }
+
+#Simulator instproc create-rfidreader-agent { node } {
+#        set ragent [new Agent/RfidReader [$node node-addr]]
+#        $self at 0.0 "$ragent start"
+#        $node set ragent_ $ragent
+#        return $ragent
+#}
+
 
 Simulator instproc create-puma-agent { node } {
         #  Create PUMA routing agent

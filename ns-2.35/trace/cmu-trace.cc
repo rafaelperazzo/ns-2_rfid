@@ -57,6 +57,7 @@
 #include <cmu-trace.h>
 #include <mobilenode.h>
 #include <simulator.h>
+#include <rfidPacket.h>
 //<zheng: add for 802.15.4>
 #include "wpan/p802_15_4pkt.h"
 #include "wpan/p802_15_4trace.h"
@@ -156,6 +157,44 @@ CMUTrace::CMUTrace(const char *s, char t) : Trace(t)
 	for (int i=0 ; i < MAX_NODE ; i++) 
 		nodeColor[i] = 3 ;
         node_ = 0;
+}
+
+//RFIDREADER TRACE
+void
+CMUTrace::format_RfidReader(Packet *p, int offset)
+{
+	hdr_rfidPacket* hdr = hdr_rfidPacket::access(p);
+
+	if (newtrace_) {
+				int origem=-9, destino=-9,qValue=-1;
+				float rng16=-9;
+				if (hdr->tipo_==1) { //tag - leitor
+					origem = hdr->tagEPC_;
+					destino = hdr->id_;
+					rng16 = hdr->rng16_;
+					qValue = hdr->qValue_;
+				}
+				else if (hdr->tipo_ == 0) { //leitor - tag
+					origem = hdr->id_;
+					destino = hdr->tagEPC_;
+				}
+				//sprintf(pt_->buffer() + offset,"-Z %d",hdr->tipo_);
+				sprintf(pt_->buffer(),"%c -t %.9f -Zt %d -Zi %d -Zs %d -Zd %d -Zc %d -Zq %d -Zr %.9f -Zv %d",
+				type_,
+				Scheduler::instance().clock(),
+				hdr->tipo_,
+				src_,
+				origem,
+				destino,
+				hdr->command_,
+				hdr->service_,
+				rng16,
+				hdr->qValue_
+				);
+
+			}
+	else {
+	}
 }
 
 void
@@ -1455,6 +1494,9 @@ void CMUTrace::format(Packet* p, const char *why)
 			break;
 		case PT_GAF:
 		case PT_PING:
+			break;
+		case PT_RFIDPACKET: 
+			format_RfidReader(p,offset);
 			break;
 		default:
 

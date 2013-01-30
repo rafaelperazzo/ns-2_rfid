@@ -66,7 +66,7 @@ public:
 	}
 } class_rfidTag;
 
-RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), id_(0), tagEPC_(0), slot_(0), rng16_(0),state_(0)
+RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), slot_(0), rng16_(0),state_(0)
 {
 	bind("packetSize_", &size_);
 	bind("id_",&id_);
@@ -198,6 +198,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		*/
 		//criar pacote de resposta
 		memory_=hdr->qValue_;
+		id_=hdr->id_;
 	        if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {
 			updateSlot();
 			if (slot_==0) {
@@ -222,13 +223,13 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==tagEPC_)) {
 			state_=T_ACKNOWLEDGED;
 			slot_--;
-		        printf("(TAG IDENTIFICADA) [%d] estado(%d): valor do slot : %d\n",here_.addr_,state_,slot_);
+		        printf("(TAG IDENTIFICADA) [%d] estado(%d): valor do slot : %d\n",tagEPC_,state_,slot_);
 			sendPacket(pkt,TC_REPLY);
 	  	}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==IP_BROADCAST)&&(slot_>0)) {
 			if (state_!=T_ACKNOWLEDGED) {
 				slot_=slot_-1;
-			        printf("tag [%d] diminui o slot para (%d)\n",here_.addr_,slot_);
+			        printf("tag [%d] diminui o slot para (%d)\n",tagEPC_,slot_);
 				if (slot_==0) {
                 	                state_=T_READY;
                         	        sendPacket(pkt,RC_QUERYREPLY);
@@ -256,7 +257,7 @@ void RfidTagAgent::updateSlot() {
         if (state_!=T_ACKNOWLEDGED) {
 		slot_=round(rng16_);
 	}
-        printf("tag [%d] de estado (%d) atualizou o slot para:  %d\n",here_.addr_,state_,slot_);
+        printf("tag [%d] de estado (%d) atualizou o slot para:  %d\n",tagEPC_,state_,slot_);
 }
 
 void RfidTagAgent::sendPacket(Packet* pkt, int command) {
@@ -274,6 +275,7 @@ void RfidTagAgent::sendPacket(Packet* pkt, int command) {
 	rfidHeader->singularization_ = hdr->singularization_;
 	rfidHeader->command_=command;
 	rfidHeader->rng16_=rng16_;
+	rfidHeader->qValue_ = memory_;
         ipHeader->daddr() = hdrip->saddr();
         ipHeader->dport() = hdrip->sport();
 	ipHeader->saddr() = here_.addr_;

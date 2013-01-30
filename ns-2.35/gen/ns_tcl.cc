@@ -1150,6 +1150,11 @@ set aodvonly [string first \"AODV\" [$agent info class]] \n\
 if {$aodvonly != -1 } {\n\
 $agent if-queue [$self set ifq_(0)]   ;# ifq between LL and MAC\n\
 }\n\
+set rfidreaderonly [string first \"RFIDREADER\" [$agent info class]] \n\
+if {$aodvonly != -1 } {\n\
+$agent if-queue [$self set ifq_(0)]   ;# ifq between LL and MAC\n\
+}\n\
+\n\
 \n\
 \n\
 if { $port == [Node set rtagent_port_] } {			\n\
@@ -19493,7 +19498,7 @@ Agent/RfidReader set memory_ 0\n\
 Agent/RfidReader set rng16_ 0\n\
 Agent/RfidReader set c_ 0.3\n\
 Agent/RfidReader set Qfp_ 4.0\n\
-Agent/RfidReader set t2_ 0.0025\n\
+Agent/RfidReader set t2_ 0.005\n\
 \n\
 \n\
 Agent/RfidTag set packetSize_ 4\n\
@@ -21367,6 +21372,8 @@ $self at 0.0 \"$ragent start\"\n\
 $node set ragent_ $ragent\n\
 return $ragent\n\
 }\n\
+\n\
+\n\
 \n\
 Simulator instproc create-puma-agent { node } {\n\
 set ragent [new Agent/PUMA [$node node-addr]]\n\
