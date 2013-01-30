@@ -58,6 +58,7 @@
 #include <mobilenode.h>
 #include <simulator.h>
 #include <rfidPacket.h>
+//#include <rfiReader.h>
 //<zheng: add for 802.15.4>
 #include "wpan/p802_15_4pkt.h"
 #include "wpan/p802_15_4trace.h"
@@ -173,6 +174,7 @@ CMUTrace::format_RfidReader(Packet *p, int offset)
 					destino = hdr->id_;
 					rng16 = hdr->rng16_;
 					qValue = hdr->qValue_;
+					//no = (RfidReaderAgent)node_->tagEPC_;
 				}
 				else if (hdr->tipo_ == 0) { //leitor - tag
 					origem = hdr->id_;
