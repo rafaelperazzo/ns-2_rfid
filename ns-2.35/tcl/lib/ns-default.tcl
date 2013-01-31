@@ -829,15 +829,15 @@ Agent/Ping set packetSize_ 64
 Agent/RfidReader set packetSize_ 4
 Agent/RfidReader set id_ 12345
 Agent/RfidReader set tagEPC_ 1
-Agent/RfidReader set singularization_ 1
-Agent/RfidReader set service_ 0
+Agent/RfidReader set singularization_ 0
+Agent/RfidReader set service_ 2
 Agent/RfidReader set qValue_ 4
 Agent/RfidReader set memory_ 0
 Agent/RfidReader set rng16_ 0
 Agent/RfidReader set c_ 0.3
 Agent/RfidReader set Qfp_ 4.0
 Agent/RfidReader set t2_ 0.0025
-Agent/RfidReader set debug_ 0
+Agent/RfidReader set messages_ 0
 
 
 Agent/RfidTag set packetSize_ 4
@@ -849,7 +849,7 @@ Agent/RfidTag set kill_ 0
 Agent/RfidTag set time_ 1
 #Agent/RfidTag set rng16_ 0
 Agent/RfidTag set memory_ 0
-Agent/RfidTag set debug_ 0
+Agent/RfidTag set messages_ 0
 Agent/RfidTag set seed_ 0.2363
 #Agent/RfidTag set slot_ 0
 

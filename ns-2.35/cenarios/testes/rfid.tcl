@@ -21,15 +21,7 @@ set tracefd [open rfid.tr w]
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
 $val(netif) set Pt_ 0.28
 $val(netif) set RXThresh_ 7.64097e-06
-#$val(netif) set RXThresh_ 2.12249e-07
-#$val(netif) set bandwidth_ 1e3
-#DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
-#$val(mac) set RTSThreshold_ 3000
-#DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
-#$val(mac) set basicRate_ 10Kb
-#$val(mac) set dataRate_ 10Kb
-#$val(mac) set bandwidth_ 3e4
-#$val(mac) set abstract_ true
+
 $ns use-newtrace
 $ns trace-all $tracefd
 #$ns namtrace-all-wireless $namtrace $val(x) $val(y)
@@ -96,9 +88,9 @@ $ns at 0.0 "$n(0) label LEITOR"
 set reader1 [new Agent/RfidReader]
 for {set i 1} {$i < $val(nn) } { incr i } {
         set tag($i) [new Agent/RfidTag]
-	$tag($i) set tagEPC_ $i+10
+	$tag($i) set tagEPC_ [expr $i*10]
 	$tag($i) set time_ 1
-	$tag($i) set debug_ 0
+	$tag($i) set messages_ 0
 	$tag($i) set seed_ [$rng2 uniform 10 1000]
 }
 
@@ -107,7 +99,8 @@ $reader1 set id_ 200
 $reader1 set singularization_ 0
 $reader1 set service_ 2
 $reader1 set t2_ 0.001
-$reader1 set debug_ 0
+$reader1 set c_ 0.3
+$reader1 set messages_ 0
 
 #CONECTANDO NOS AOS AGENTES
 for {set i 1} {$i < $val(nn) } { incr i } {

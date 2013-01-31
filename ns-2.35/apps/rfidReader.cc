@@ -76,7 +76,7 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 	bind("qValue_",&qValue_);
 	bind("c_",&c_);
 	bind("t2_",&t2_);
-	bind("debug_",&debug_);
+	bind("messages_",&debug_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -129,7 +129,7 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 	}
 	tagEPC_=hdr->tagEPC_;
 	if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
-		if (debug_) printf("Tag [%d] identified\n",hdr->tagEPC_);
+		if (debug_==1) printf("Tag [%d] identified\n",hdr->tagEPC_);
 		counter_=0;
 	}
 

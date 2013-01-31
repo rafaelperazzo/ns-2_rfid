@@ -75,7 +75,7 @@ RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), slot_(0), rng16_(0),state_(
 	bind("kill_",&kill_);
 	bind("time_",&time_);
 	bind("memory_",&memory_);
-	bind("debug_",&debug_);
+	bind("messages_",&debug_);
 	bind("seed_",&seed_);
 }
 
