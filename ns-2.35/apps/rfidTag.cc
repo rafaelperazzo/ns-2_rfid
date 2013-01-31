@@ -75,6 +75,8 @@ RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), slot_(0), rng16_(0),state_(
 	bind("kill_",&kill_);
 	bind("time_",&time_);
 	bind("memory_",&memory_);
+	bind("debug_",&debug_);
+	bind("seed_",&seed_);
 }
 
 int RfidTagAgent::command(int argc, const char*const* argv)
@@ -147,13 +149,13 @@ long RfidTagAgent::unifRand(long n)
 // Reset the random number generator with the system clock.
 void RfidTagAgent::seed()
 {
-	srand(tagEPC_*(unsigned)time(0)+Scheduler::instance().clock()*memory_);
+	srand(seed_);
 }
 
 // Reset the random number generator with the system clock.
 void RfidTagAgent::seed(double s)
 {
-        srand(s);
+        srand(seed_+s);
 }
 
 
@@ -223,13 +225,13 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==tagEPC_)) {
 			state_=T_ACKNOWLEDGED;
 			slot_--;
-		        printf("(TAG IDENTIFICADA) [%d] estado(%d): valor do slot : %d\n",tagEPC_,state_,slot_);
+		        if (debug_) printf("(TAG IDENTIFICADA) [%d] estado(%d): valor do slot : %d\n",tagEPC_,state_,slot_);
 			sendPacket(pkt,TC_REPLY);
 	  	}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==IP_BROADCAST)&&(slot_>0)) {
 			if (state_!=T_ACKNOWLEDGED) {
 				slot_=slot_-1;
-			        printf("tag [%d] diminui o slot para (%d)\n",tagEPC_,slot_);
+			        if (debug_) printf("tag [%d] diminui o slot para (%d)\n",tagEPC_,slot_);
 				if (slot_==0) {
                 	                state_=T_READY;
                         	        sendPacket(pkt,RC_QUERYREPLY);
@@ -252,12 +254,15 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 }
 
 void RfidTagAgent::updateSlot() {
-	seed();
+	//seed();
+	Random::seed_heuristically();
 	rng16_=Random::uniform(0,pow(2,memory_)-1);
+	//rng16_= unifRand(0,pow(2,memory_)-1);
+	//printf("Seed: %i - rng16_: %f\n",Random::seed_heuristically(),rng16_);
         if (state_!=T_ACKNOWLEDGED) {
 		slot_=round(rng16_);
 	}
-        printf("tag [%d] de estado (%d) atualizou o slot para:  %d\n",tagEPC_,state_,slot_);
+        if (debug_) printf("tag [%d] de estado (%d) atualizou o slot para:  %d\n",tagEPC_,state_,slot_);
 }
 
 void RfidTagAgent::sendPacket(Packet* pkt, int command) {

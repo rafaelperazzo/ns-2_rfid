@@ -19499,6 +19499,7 @@ Agent/RfidReader set rng16_ 0\n\
 Agent/RfidReader set c_ 0.3\n\
 Agent/RfidReader set Qfp_ 4.0\n\
 Agent/RfidReader set t2_ 0.0025\n\
+Agent/RfidReader set debug_ 0\n\
 \n\
 \n\
 Agent/RfidTag set packetSize_ 4\n\
@@ -19509,6 +19510,8 @@ Agent/RfidTag set service_ 0\n\
 Agent/RfidTag set kill_ 0\n\
 Agent/RfidTag set time_ 1\n\
 Agent/RfidTag set memory_ 0\n\
+Agent/RfidTag set debug_ 0\n\
+Agent/RfidTag set seed_ 0.2363\n\
 \n\
 Agent/UDP set packetSize_ 1000\n\
 Agent/UDP instproc done {} { }\n\

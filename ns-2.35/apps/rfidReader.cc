@@ -76,6 +76,7 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 	bind("qValue_",&qValue_);
 	bind("c_",&c_);
 	bind("t2_",&t2_);
+	bind("debug_",&debug_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -132,13 +133,13 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 	}
 	tagEPC_=hdr->tagEPC_;
 	if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
-		printf("Tag [%d] identificada\n",hdr->tagEPC_);
+		if (debug_) printf("Tag [%d] identificada\n",hdr->tagEPC_);
 		counter_=0;
 	}
 
   }
   else if(hdr->tipo_==FLOW_RT){
-	printf("Leitor (NÃO IDENTIFICADO) recebeu RESPOSTA de (%i)\n",hdr->tagEPC_);
+	if (debug_) printf("Leitor (NÃO IDENTIFICADO) recebeu RESPOSTA de (%i)\n",hdr->tagEPC_);
   }
   Packet::free(pkt);
   return;
@@ -201,7 +202,7 @@ void RfidReaderAgent::send_query_ajust() {
 	rfidHeader->command_=RC_QUERYADJUST;
         rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
-        printf("Novo qValue=%i\n",rfidHeader->qValue_);
+        if (debug_) printf("Novo qValue=%i\n",rfidHeader->qValue_);
 	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->dport() = ipHeader->sport();
         ipHeader->saddr() = here_.addr_; //Source: reader ip
@@ -264,37 +265,44 @@ int RfidReaderAgent::getIP() {
 void RfidReaderAgent::start_sing() {
 
 	 if (counter_==0) {
-                printf("NENHUMA TAG RESPONDEU!!\n");
+                if (debug_) printf("NENHUMA TAG RESPONDEU!!\n");
                 Qfp_=fmax(0,Qfp_ - c_);
                 if (Qfp_>15) {
                         Qfp_=15;
                 }
-                qValue_=round(Qfp_);
-                printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
+                
+		if (qValue_!=-1) qValue_=round(Qfp_);
+                if (debug_) printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
                 send_query_ajust();
-		//if ((Qfp-c)<0) return;
-		//else
+		if (qValue_>0) {
+			send_query_ajust();
 			rs_timer_.resched(t2_);
+		}
+		else if (qValue_==0) {
+			qValue_--;
+			send_query_ajust();
+			rs_timer_.resched(t2_);
+		}
+		else if (qValue_==-1) {
+			return;
+		}
         }
         if (counter_==1) {
-                printf("APENAS UMA TAG RESPONDEU!!\n");
+                if (debug_) printf("APENAS UMA TAG RESPONDEU!!\n");
 		counter_=0;
 		send_query_reply();
 		send_query_reply_update_slot();
-		//rs_timer_restart_.resched(t2_);
-		//if (qValue_==0) return;
-		//else 
-			rs_timer_.resched(t2_);
+		rs_timer_.resched(t2_);
 
         }
 	if (counter_>1) {
-                printf("COLISÃO - MAIS DE UMA TAG RESPONDEU(%d)!!\n",counter_);
+                if (debug_) printf("COLISÃO - MAIS DE UMA TAG RESPONDEU(%d)!!\n",counter_);
                 Qfp_=fmin(15,Qfp_ + c_);
                 if (Qfp_<0) {
                         Qfp_=0;
                 }
                 qValue_=round(Qfp_);
-                printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
+                if (debug_) printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
                 counter_=0;
 		send_query_ajust();
 		if (qValue_==15) return;

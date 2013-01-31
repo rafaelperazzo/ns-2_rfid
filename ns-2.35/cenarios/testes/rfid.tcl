@@ -75,8 +75,12 @@ set rng1 [new RNG]
 $rng1 seed 0
 set rng2 [new RNG]
 $rng2 seed 0
+
+set rng3 [new RNG]
+$rng3 seed 0
+
 #puts "[$rng2 uniform 0 20]"
-#puts "[$rng2 uniform 0 20]"
+puts "[$rng3 uniform 10 1000]"
 for {set i 1} {$i < $val(nn) } { incr i } {
       $n($i) set X_ [$rng1 uniform 8 12]
       $n($i) set Y_ [$rng2 uniform 8 12]
@@ -94,6 +98,8 @@ for {set i 1} {$i < $val(nn) } { incr i } {
         set tag($i) [new Agent/RfidTag]
 	$tag($i) set tagEPC_ $i+10
 	$tag($i) set time_ 1
+	$tag($i) set debug_ 0
+	$tag($i) set seed_ [$rng2 uniform 10 1000]
 }
 
 #Definindo parametros dos agentes
@@ -101,6 +107,7 @@ $reader1 set id_ 200
 $reader1 set singularization_ 0
 $reader1 set service_ 2
 $reader1 set t2_ 0.001
+$reader1 set debug_ 0
 
 #CONECTANDO NOS AOS AGENTES
 for {set i 1} {$i < $val(nn) } { incr i } {
