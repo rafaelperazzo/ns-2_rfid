@@ -86,11 +86,6 @@ public:
         enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
 	enum TAG_STATE{T_READY=0,T_ARBITRATE=1,T_REPLY=2,T_ACKNOWLEDGED=3,T_OPEN=4,T_SECURED=5,T_KILLED=6}tag_state;
         enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4,TC_REPLY=5}reader_command;
-	double unifRand();
-	double unifRand(double a, double b);
-	long unifRand(long n);
-	void seed();
-	void seed(double s);
 	void updateSlot();
 };
 

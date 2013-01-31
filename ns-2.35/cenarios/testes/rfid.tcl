@@ -7,7 +7,7 @@ set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 1000 ;# max packet in ifq
-set val(nn) 5 ;# number of mobilenodes
+set val(nn) 10 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography
@@ -80,7 +80,7 @@ set rng3 [new RNG]
 $rng3 seed 0
 
 #puts "[$rng2 uniform 0 20]"
-puts "[$rng3 uniform 10 1000]"
+#puts "[$rng3 uniform 10 1000]"
 for {set i 1} {$i < $val(nn) } { incr i } {
       $n($i) set X_ [$rng1 uniform 8 12]
       $n($i) set Y_ [$rng2 uniform 8 12]

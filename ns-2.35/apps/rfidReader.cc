@@ -65,7 +65,7 @@ public:
 } class_rfidReader;
 
 
-RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),Qfp_(4),counter_(0),rs_timer_(this), rs_timer_restart_(this)
+RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),Qfp_(4),counter_(0),rs_timer_(this)
 {
 	bind("packetSize_", &size_);
 	bind("tagEPC_",&tagEPC_);
@@ -106,11 +106,8 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
   hdr_ip* hdrip = hdr_ip::access(pkt);
   // Access the RfidReader header for the received packet:
   hdr_rfidPacket* hdr = hdr_rfidPacket::access(pkt);
-  //printf("Tipo: %d - Id: %d - Service: %d\n",hdr->tipo_,hdr->id_,hdr->service_);
-  
   if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_TRACKING)) { //Se o pacote é do tipo TAG-LEITOR e for endereçado a este leitor
-  	//printf("%i\n",hdr->tagEPC_);
-	if (hdr->ack_==1) {
+  	if (hdr->ack_==1) {
 		//Enviar ACK de confirmação
 		Packet* pktret = allocpkt();
 	        hdr_rfidPacket* rfidHeader = hdr_rfidPacket::access(pktret);
@@ -124,7 +121,6 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 	        ipHeader->daddr() = hdrip->saddr();
         	ipHeader->dport() = hdrip->sport();
 		send(pktret,0);
-		//printf("Enviou Ack de confirmacao\n");
 	}
   }
   else if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_STANDARD)) {
@@ -133,13 +129,13 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 	}
 	tagEPC_=hdr->tagEPC_;
 	if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
-		if (debug_) printf("Tag [%d] identificada\n",hdr->tagEPC_);
+		if (debug_) printf("Tag [%d] identified\n",hdr->tagEPC_);
 		counter_=0;
 	}
 
   }
   else if(hdr->tipo_==FLOW_RT){
-	if (debug_) printf("Leitor (NÃO IDENTIFICADO) recebeu RESPOSTA de (%i)\n",hdr->tagEPC_);
+	if (debug_) printf("Reader (unknown) received REPLY from (%i)\n",hdr->tagEPC_);
   }
   Packet::free(pkt);
   return;
@@ -202,7 +198,7 @@ void RfidReaderAgent::send_query_ajust() {
 	rfidHeader->command_=RC_QUERYADJUST;
         rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
-        if (debug_) printf("Novo qValue=%i\n",rfidHeader->qValue_);
+        if (debug_) printf("New qValue=%i\n",rfidHeader->qValue_);
 	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->dport() = ipHeader->sport();
         ipHeader->saddr() = here_.addr_; //Source: reader ip
@@ -253,19 +249,10 @@ void RfidReaderAgent::send_query_reply_update_slot() {
         send(pkt, (Handler*) 0); 
 }
 
-
-int RfidReaderAgent::getCounter() {
-	return (counter_);
-}
-
-int RfidReaderAgent::getIP() {
-	return (here_.addr_);
-}
-
 void RfidReaderAgent::start_sing() {
 
 	 if (counter_==0) {
-                if (debug_) printf("NENHUMA TAG RESPONDEU!!\n");
+                if (debug_) printf("NO TAGS RESPONSES!!\n");
                 Qfp_=fmax(0,Qfp_ - c_);
                 if (Qfp_>15) {
                         Qfp_=15;
@@ -288,7 +275,7 @@ void RfidReaderAgent::start_sing() {
 		}
         }
         if (counter_==1) {
-                if (debug_) printf("APENAS UMA TAG RESPONDEU!!\n");
+                if (debug_) printf("JUST ONE TAG REPLY!!\n");
 		counter_=0;
 		send_query_reply();
 		send_query_reply_update_slot();
@@ -296,7 +283,7 @@ void RfidReaderAgent::start_sing() {
 
         }
 	if (counter_>1) {
-                if (debug_) printf("COLISÃO - MAIS DE UMA TAG RESPONDEU(%d)!!\n",counter_);
+                if (debug_) printf("COLLISION - (%d) tags replied\n",counter_);
                 Qfp_=fmin(15,Qfp_ + c_);
                 if (Qfp_<0) {
                         Qfp_=0;
@@ -313,10 +300,5 @@ void RfidReaderAgent::start_sing() {
 
 void RetransmitTimer::expire(Event *e) {
 	a_->start_sing();
-}
-
-void RestartTimer::expire(Event *e) {
-        a_->send_query();
-	a_->rs_timer_.resched(a_->t2_);
 }
 

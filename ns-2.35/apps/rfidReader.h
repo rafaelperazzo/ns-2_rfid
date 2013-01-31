@@ -72,49 +72,38 @@ class RetransmitTimer : public TimerHandler {
                 RfidReaderAgent *a_;
  };
 
-class RestartTimer : public TimerHandler {
-        public:
-                RestartTimer(RfidReaderAgent *a) : TimerHandler() { a_ = a; }
-        protected:
-                virtual void expire(Event *e);
-                RfidReaderAgent *a_;
- };
-
 class RfidReaderAgent : public Agent {
 public:
 	RfidReaderAgent();
 	virtual int command(int argc, const char*const* argv);
 	virtual void recv(Packet*, Handler*);
-	int id_;
-	int tagEPC_;
-	int singularization_;
-	int service_;
-	int state_;
-	int qValue_;
-	int command_;
-	double Qfp_;
-	int memory_;
-	float rng16_;
-	int tag_;
-	int counter_;
-	double c_;
-	int debug_;
+	int id_; //reader id
+	int tagEPC_; //last received EPC
+	int singularization_; //deprecated
+	int service_; //Use value 2
+	int state_; //reader state
+	int qValue_; //Q value
+	int command_; //command type
+	double Qfp_; 
+	int memory_; //optional memory
+	float rng16_; //received rng16
+	int tag_; 
+	int counter_; //receved packets counter
+	double c_; //constanc c from Q algorithm
+	int debug_; //View debug messages
 	enum FLUXO {FLOW_RT=0, FLOW_TR=1,FLOW_RT_ACK=2}flow;
 	enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2}service;
 	enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
 	enum READER_STATE{RS_SELECT=0,RS_INVENTORY=1,RS_ACCESS=2}reader_state;
 	enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4, TC_REPLY=5}reader_command;
 	void resend();
-	void send_query();
-	void send_query_ajust();
-	void send_query_reply();
-	int getCounter();
-	int getIP();
-	void start_sing();
+	void send_query(); //Initial command
+	void send_query_ajust(); //QueryAdjust
+	void send_query_reply(); //QueryReply
+	void start_sing(); 
 	void send_query_reply_update_slot();
-	double t2_;
+	double t2_; //slot time
 	RetransmitTimer rs_timer_;
-	RestartTimer rs_timer_restart_;
 };
 
 //#endif // ns_rfidReader_h
