@@ -100,6 +100,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 $reader1 set id_ 200
 $reader1 set singularization_ 0
 $reader1 set service_ 2
+$reader1 set t2_ 0.001
 
 #CONECTANDO NOS AOS AGENTES
 for {set i 1} {$i < $val(nn) } { incr i } {

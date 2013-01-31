@@ -272,17 +272,20 @@ void RfidReaderAgent::start_sing() {
                 qValue_=round(Qfp_);
                 printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
                 send_query_ajust();
-		if (qValue_==0) return;
-		else
+		//if ((Qfp-c)<0) return;
+		//else
 			rs_timer_.resched(t2_);
         }
         if (counter_==1) {
                 printf("APENAS UMA TAG RESPONDEU!!\n");
 		counter_=0;
 		send_query_reply();
-		rs_timer_.resched(t2_);
 		send_query_reply_update_slot();
-		rs_timer_restart_.resched(t2_);
+		//rs_timer_restart_.resched(t2_);
+		//if (qValue_==0) return;
+		//else 
+			rs_timer_.resched(t2_);
+
         }
 	if (counter_>1) {
                 printf("COLISÃO - MAIS DE UMA TAG RESPONDEU(%d)!!\n",counter_);
