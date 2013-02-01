@@ -133,7 +133,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 	        if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {
 			updateSlot();
 			if (slot_==0) {
-	                        state_=T_READY;
+	                        state_=T_REPLY;
         	                sendPacket(pkt,RC_QUERY);
                         }
                         else {
@@ -141,6 +141,19 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
                         }
 
 		}
+		else if ((hdr->command_==RC_QUERY)&&(state_==T_ACKNOWLEDGED)) {
+                        state_=T_READY;
+			updateSlot();
+                        if (slot_==0) {
+                                state_=T_REPLY;
+                                sendPacket(pkt,RC_QUERY);
+                        }
+                        else {
+                                state_=T_ARBITRATE;
+                        }
+
+                }
+
 		else if ((hdr->command_==RC_QUERYADJUST)&&(state_!=T_ACKNOWLEDGED)) {
 		     	updateSlot();
 			if (slot_==0) {

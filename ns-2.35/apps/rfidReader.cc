@@ -128,6 +128,7 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 		counter_++;
 	}
 	tagEPC_=hdr->tagEPC_;
+	rng16_=hdr->rng16_;
 	if (hdr->command_==TC_REPLY) { //UNIQUE TAG RESPONSE
 		if (debug_==1) printf("Tag [%d] identified\n",hdr->tagEPC_);
 		counter_=0;
@@ -222,6 +223,7 @@ void RfidReaderAgent::send_query_reply() {
 	rfidHeader->command_=RC_QUERYREPLY;
         rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=tagEPC_;
+	rfidHeader->rng16_=rng16_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         //Sends the packet
