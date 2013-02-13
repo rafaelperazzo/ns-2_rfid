@@ -31523,3 +31523,52 @@ highestAntennaZ_ = 1.5,  distCST_ = 549.1
 warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
 INITIALIZE THE LIST xListHead
 SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 201
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 201
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 201
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 201
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 201
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 201
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 201
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
