@@ -1,4 +1,8 @@
 # Define options
+#if {$argc!=1} {
+#        puts "Error! Number of nodes missing!"
+#        exit
+#}
 set val(chan) Channel/WirelessChannel ;# channel type
 set val(prop) Propagation/TwoRayGround ;# radio-propagation model: TwoRayGround/FreeSpace
 set val(netif) Phy/WirelessPhy ;# network interface type
@@ -7,7 +11,7 @@ set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 1000 ;# max packet in ifq
-set val(nn) 500 ;# number of mobilenodes
+set val(nn) [lindex $argv 1] ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography
@@ -15,7 +19,7 @@ set val(y) 30 ;# Y dimension of topography
 set val(stop) 100 ;# time of simulation end
 
 set ns [new Simulator]
-set tracefd [open rfid.tr w]
+set tracefd [open [lindex $argv 0] w]
 #set namtrace [open rfid.nam w] 
 
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
@@ -116,7 +120,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
         $ns connect $reader1 $tag($i)
 }
 
-for {set i 2} {$i < $val(stop) } { incr i 101} {
+for {set i 0} {$i < $val(stop) } { incr i 101} {
         $ns at $i "$reader1 standard-query-tags"
 }
 
