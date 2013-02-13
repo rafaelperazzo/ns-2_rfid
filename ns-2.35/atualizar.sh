@@ -1,5 +1,6 @@
-cp atualizar.sh ns-2.35/
+cd /home/rafael/ns-allinone-2.35/
+cp atualizar.sh /home/rafael/ns-allinone-2.35/ns-2.35/
 now=$(date '+%d/%m/%Y %H:%M')
-git add ns-2.35
+git add /home/rafael/ns-allinone-2.35/ns-2.35
 git commit -a -m "Version $now"
 git push origin master --force
