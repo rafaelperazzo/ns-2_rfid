@@ -16,7 +16,7 @@ set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 
-set val(stop) 100 ;# time of simulation end
+set val(stop) 5 ;# time of simulation end
 
 set ns [new Simulator]
 set tracefd [open [lindex $argv 0] w]

@@ -49,7 +49,8 @@
  * File: Code for a new 'RfidReader' Agent Class for the ns
  *       network simulator
  * Author: Rafael Perazzo Barbosa Mota (perazzo@ime.usp.br), Setembro 2012
- * Last update: 30/JAN/2012
+ * Links para pagina e epcglobal 
+ *Last update: 30/JAN/2012
  */
 
 #include "rfidReader.h"
@@ -65,7 +66,7 @@ public:
 } class_rfidReader;
 
 
-RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),Qfp_(4),counter_(0),rs_timer_(this)
+RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),Qfp_(4),counter_(0),rs_timer_(this),slotCounter_(0)
 {
 	bind("packetSize_", &size_);
 	bind("tagEPC_",&tagEPC_);
@@ -175,6 +176,7 @@ void RfidReaderAgent::send_query() {
 	rfidHeader->command_=RC_QUERY;
 	rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
+	rfidHeader->slotCounter_=slotCounter_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         ipHeader->sport() = here_.port_;
@@ -199,6 +201,7 @@ void RfidReaderAgent::send_query_ajust() {
 	rfidHeader->command_=RC_QUERYADJUST;
         rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
+	rfidHeader->slotCounter_=slotCounter_;
         if (debug_) printf("New qValue=%i\n",rfidHeader->qValue_);
 	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->dport() = ipHeader->sport();
@@ -224,6 +227,7 @@ void RfidReaderAgent::send_query_reply() {
         rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=tagEPC_;
 	rfidHeader->rng16_=rng16_;
+	rfidHeader->slotCounter_=slotCounter_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         //Sends the packet
@@ -245,6 +249,7 @@ void RfidReaderAgent::send_query_reply_update_slot() {
         rfidHeader->command_=RC_QUERYREPLY;
         rfidHeader->qValue_=qValue_;
         rfidHeader->tagEPC_=IP_BROADCAST;
+	rfidHeader->slotCounter_=slotCounter_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         //Sends the packet
@@ -252,14 +257,14 @@ void RfidReaderAgent::send_query_reply_update_slot() {
 }
 
 void RfidReaderAgent::start_sing() {
-
+	 slotCounter_++;
 	 if (counter_==0) {
                 if (debug_) printf("NO TAGS RESPONSES!!\n");
                 Qfp_=fmax(0,Qfp_ - c_);
                 if (Qfp_>15) {
                         Qfp_=15;
                 }
-                
+
 		if (qValue_!=-1) qValue_=round(Qfp_);
                 if (debug_) printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
                 send_query_ajust();
@@ -273,6 +278,7 @@ void RfidReaderAgent::start_sing() {
 			rs_timer_.resched(t2_);
 		}
 		else if (qValue_==-1) {
+			printf("Slots number: %d\n",slotCounter_);
 			return;
 		}
         }

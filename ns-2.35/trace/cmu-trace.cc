@@ -167,7 +167,7 @@ CMUTrace::format_RfidReader(Packet *p, int offset)
 	hdr_rfidPacket* hdr = hdr_rfidPacket::access(p);
 
 	if (newtrace_) {
-				int origem=-9, destino=-9,qValue=-1;
+				int origem=-9, destino=-9,qValue=-1,slotCounter=0;
 				float rng16=-9;
 				if (hdr->tipo_==1) { //tag - leitor
 					origem = hdr->tagEPC_;
@@ -179,9 +179,10 @@ CMUTrace::format_RfidReader(Packet *p, int offset)
 				else if (hdr->tipo_ == 0) { //leitor - tag
 					origem = hdr->id_;
 					destino = hdr->tagEPC_;
+					slotCounter=hdr->slotCounter_;
 				}
 				//sprintf(pt_->buffer() + offset,"-Z %d",hdr->tipo_);
-				sprintf(pt_->buffer(),"%c -t %.9f -Zt %d -Zi %d -Zs %d -Zd %d -Zc %d -Zq %d -Zr %.9f -Zv %d",
+				sprintf(pt_->buffer(),"%c -t %.9f -Zt %d -Zi %d -Zs %d -Zd %d -Zc %d -Zq %d -Zr %.3f -Zv %d -Zz %d",
 				type_,
 				Scheduler::instance().clock(),
 				hdr->tipo_,
@@ -191,7 +192,8 @@ CMUTrace::format_RfidReader(Packet *p, int offset)
 				hdr->command_,
 				hdr->service_,
 				rng16,
-				hdr->qValue_
+				hdr->qValue_,
+				slotCounter
 				);
 
 			}

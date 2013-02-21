@@ -104,6 +104,7 @@ public:
 	void send_query_reply_update_slot();
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
+	int slotCounter_;
 };
 
 //#endif // ns_rfidReader_h

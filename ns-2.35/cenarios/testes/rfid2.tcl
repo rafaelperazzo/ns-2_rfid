@@ -7,29 +7,20 @@ set val(ifq) Queue/DropTail/PriQueue ;# interface queue type
 set val(ll) LL ;# link layer type
 set val(ant) Antenna/OmniAntenna ;# antenna model
 set val(ifqlen) 1000 ;# max packet in ifq
-set val(nn) 5 ;# number of mobilenodes
+set val(nn) 10 ;# number of mobilenodes
 set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
-set val(x) 30 ;# X dimension of topography
-set val(y) 30 ;# Y dimension of topography 
-set val(stop) 100 ;# time of simulation end
+set val(x) 30 ;# X dimension of topography (m)
+set val(y) 30 ;# Y dimension of topography  (m)
+set val(stop) 5 ;# time of simulation end (s)
 
 set ns [new Simulator]
 set tracefd [open rfid.tr w]
 #set namtrace [open rfid.nam w] 
 
 #DEFININDO POTENCIA DO SINAL PARA LIMITAR ALCANCE DO LEITOR
-$val(netif) set Pt_ 0.28
+$val(netif) set Pt_ 0.28 
 $val(netif) set RXThresh_ 7.64097e-06
-#$val(netif) set RXThresh_ 2.12249e-07
-#$val(netif) set bandwidth_ 1e3
-#DESABILITANDO RTS/CTS POR NÃO FAZER PARTE DO PROTOCOLO RFID
-#$val(mac) set RTSThreshold_ 3000
-#DEFININDO VELOCIDADE DOS CANAIS FORWARD(leitor-tag) E BACKWARD(tag-leitor)
-#$val(mac) set basicRate_ 10Kb
-#$val(mac) set dataRate_ 10Kb
-#$val(mac) set bandwidth_ 3e4
-#$val(mac) set abstract_ true
 $ns use-newtrace
 $ns trace-all $tracefd
 #$ns namtrace-all-wireless $namtrace $val(x) $val(y)
@@ -91,10 +82,10 @@ $ns at 0.0 "$n(0) label LEITOR"
 #Definindo conexão
 set reader1 [new Agent/RfidReader]
 for {set i 1} {$i < $val(nn) } { incr i } {
-        set tag_$i [new Agent/RfidTag]
-	$tag_$i set tagEPC_ $i+10
-	$tag_$i set time_ 1
-	$tag_$i set debug_ 0
+        set tag($i) [new Agent/RfidTag]
+	$tag($i) set tagEPC_ $i+10
+	$tag($i) set time_ 1
+	$tag($i) set debug_ 0
 }
 
 #Definindo parametros dos agentes
@@ -106,7 +97,7 @@ $reader1 set debug_ 0
 
 #CONECTANDO NOS AOS AGENTES
 for {set i 1} {$i < $val(nn) } { incr i } {
-        $ns attach-agent $n($i) $tag_$i
+        $ns attach-agent $n($i) $tag($i)
 }
 $ns attach-agent $n(0) $reader1
 
@@ -115,7 +106,7 @@ $ns attach-agent $n(0) $reader1
 #$ns connect $reader1 $tag2
 
 for {set i 1} {$i < $val(nn) } { incr i } {
-        $ns connect $reader1 $tag_$i
+        $ns connect $reader1 $tag($i)
 }
 
 for {set i 2} {$i < $val(stop) } { incr i 101} {
