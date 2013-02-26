@@ -77,6 +77,7 @@ RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), slot_(0), rng16_(0),state_(
 	bind("memory_",&memory_);
 	bind("messages_",&debug_);
 	bind("seed_",&seed_);
+	bind("trace_",&trace_);
 }
 
 int RfidTagAgent::command(int argc, const char*const* argv)
@@ -127,7 +128,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		*Protocol for Communications at 860 MHz – 960 MHz
 		*Version 1.2.0
 		*/
-		//criar pacote de resposta
+		//make reply packet
 		memory_=hdr->qValue_;
 		id_=hdr->id_;
 	        if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {
@@ -220,6 +221,7 @@ void RfidTagAgent::sendPacket(Packet* pkt, int command) {
 	rfidHeader->command_=command;
 	rfidHeader->rng16_=rng16_;
 	rfidHeader->qValue_ = memory_;
+	rfidHeader->trace_=trace_;
         ipHeader->daddr() = hdrip->saddr();
         ipHeader->dport() = hdrip->sport();
 	ipHeader->saddr() = here_.addr_;

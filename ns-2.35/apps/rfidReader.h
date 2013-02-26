@@ -104,7 +104,15 @@ public:
 	void send_query_reply_update_slot();
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
-	int slotCounter_;
+	int slotCounter_; //Total number of slots
+	int collisions_; //Number of collision slots
+	int idle_; //Number of idle slots
+	int success_;
+	int bigQ_; //Stores the biggest Q Value
+	int total_; //Total number of collisions
+	int uniqCounter_;
+	int session_; //Query counter
+	int trace_; //1 - Simple trace 0 - Normal trace
 };
 
 //#endif // ns_rfidReader_h

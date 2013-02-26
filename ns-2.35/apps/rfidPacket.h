@@ -22,6 +22,11 @@ struct hdr_rfidPacket {
 	int qValue_; //Q value from Q algorithm
 	int command_; //Command type: QUERY,QUERYADJUST,...
 	int slotCounter_;
+	int colCounter_; //Collision slot counter
+	int sucCounter_; //Success slot counter
+	int idlCounter_; //Idle slot counter
+	int session_;
+	int trace_; //Include debug traces
 	// Header access methods
 	static int offset_; // required by PacketHeaderManager
 	inline static int& offset() { return offset_; }

@@ -12,7 +12,7 @@ set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography (m)
 set val(y) 30 ;# Y dimension of topography  (m)
-set val(stop) 5 ;# time of simulation end (s)
+set val(stop) 8 ;# time of simulation end (s)
 
 set ns [new Simulator]
 set tracefd [open rfid.tr w]
@@ -85,7 +85,8 @@ for {set i 1} {$i < $val(nn) } { incr i } {
         set tag($i) [new Agent/RfidTag]
 	$tag($i) set tagEPC_ $i+10
 	$tag($i) set time_ 1
-	$tag($i) set debug_ 0
+	$tag($i) set messages_ 0
+	$tag($i) set trace_ 1
 }
 
 #Definindo parametros dos agentes
@@ -93,8 +94,10 @@ $reader1 set id_ 200
 $reader1 set singularization_ 0
 $reader1 set service_ 2
 $reader1 set t2_ 0.001
-$reader1 set debug_ 0
-
+$reader1 set messages_ 0
+$reader1 set qValue_ 4
+$reader1 set trace_ 1
+$reader1 set Qfp_ 4.0
 #CONECTANDO NOS AOS AGENTES
 for {set i 1} {$i < $val(nn) } { incr i } {
         $ns attach-agent $n($i) $tag($i)
@@ -112,6 +115,8 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 for {set i 2} {$i < $val(stop) } { incr i 101} {
         $ns at $i "$reader1 standard-query-tags"
 }
+$ns at 4.0 "$reader1 standard-query-tags"
+$ns at 6.0 "$reader1 standard-query-tags"
 
 #$ns at 1.0 "$reader1 query-tags"
 

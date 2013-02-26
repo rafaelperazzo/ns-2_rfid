@@ -167,22 +167,57 @@ CMUTrace::format_RfidReader(Packet *p, int offset)
 	hdr_rfidPacket* hdr = hdr_rfidPacket::access(p);
 
 	if (newtrace_) {
-				int origem=-9, destino=-9,qValue=-1,slotCounter=0;
+				int origem=-9, destino=-9,qValue=-1,slotCounter=0, dest;
 				float rng16=-9;
+				int col,idl,suc=0,session=0;
+				col=hdr->colCounter_;
+				idl=hdr->idlCounter_;
+				suc=hdr->sucCounter_;
+				session=hdr->session_;
+				dest=hdr->tagEPC_;
 				if (hdr->tipo_==1) { //tag - leitor
 					origem = hdr->tagEPC_;
 					destino = hdr->id_;
 					rng16 = hdr->rng16_;
 					qValue = hdr->qValue_;
 					//no = (RfidReaderAgent)node_->tagEPC_;
+					sprintf(pt_->buffer(),"%c -t %.9f -Zt %d -Zi %d -Zs %d -Zd %d -Zc %d -Zq %d -Zr %.3f -Zv %d",
+                                	type_,
+	                                Scheduler::instance().clock(),
+        	                        hdr->tipo_,
+                	                src_,
+                        	        origem,
+                                	dest,
+	                                hdr->command_,
+        	                        hdr->service_,
+                	                rng16,
+                        	        hdr->qValue_
+                                	);
 				}
 				else if (hdr->tipo_ == 0) { //leitor - tag
 					origem = hdr->id_;
 					destino = hdr->tagEPC_;
 					slotCounter=hdr->slotCounter_;
+					sprintf(pt_->buffer(),"%c -t %.9f -Zt %d -Zi %d -Zs %d -Zd %d -Zc %d -Zq %d -Zv %d -Zz %d Xc %d Xi %d Xs %d -Ss %d",
+	                                type_,
+        	                        Scheduler::instance().clock(),
+                	                hdr->tipo_,
+                        	        src_,
+                                	origem,
+	                                destino,
+        	                        hdr->command_,
+                	                hdr->service_,
+                                	hdr->qValue_,
+	                                slotCounter,
+        	                        col,
+                	                idl,
+                        	        suc,
+                                	session
+	                                );
+
 				}
 				//sprintf(pt_->buffer() + offset,"-Z %d",hdr->tipo_);
-				sprintf(pt_->buffer(),"%c -t %.9f -Zt %d -Zi %d -Zs %d -Zd %d -Zc %d -Zq %d -Zr %.3f -Zv %d -Zz %d",
+				/*sprintf(pt_->buffer(),"%c -t %.9f -Zt %d -Zi %d -Zs %d -Zd %d -Zc %d -Zq %d -Zr %.3f -Zv %d -Zz %d Xc %d Xi %d Xs %d -Ss %d",
 				type_,
 				Scheduler::instance().clock(),
 				hdr->tipo_,
@@ -193,8 +228,12 @@ CMUTrace::format_RfidReader(Packet *p, int offset)
 				hdr->service_,
 				rng16,
 				hdr->qValue_,
-				slotCounter
-				);
+				slotCounter,
+				col,
+				idl,
+				suc,
+				session
+				);*/
 
 			}
 	else {

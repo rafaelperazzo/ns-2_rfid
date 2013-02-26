@@ -66,7 +66,7 @@ public:
 } class_rfidReader;
 
 
-RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),Qfp_(4),counter_(0),rs_timer_(this),slotCounter_(0)
+RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),counter_(0),rs_timer_(this),slotCounter_(0), collisions_(0), idle_(0),success_(0),total_(0),uniqCounter_(0),session_(0)
 {
 	bind("packetSize_", &size_);
 	bind("tagEPC_",&tagEPC_);
@@ -78,6 +78,8 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 	bind("c_",&c_);
 	bind("t2_",&t2_);
 	bind("messages_",&debug_);
+	bind("Qfp_",&Qfp_);
+	bind("trace_",&trace_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -88,6 +90,14 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
       return (TCL_OK);
     }
     else if (strcmp(argv[1], "standard-query-tags") == 0) {
+	bigQ_=qValue_;
+	collisions_=0;
+	idle_=0;
+	success_=0;
+	session_++;
+	slotCounter_=0;
+	total_=0;
+	uniqCounter_=0;
 	send_query();
 	rs_timer_.resched(t2_); //Wait for tags responses
 	return (TCL_OK);
@@ -177,6 +187,11 @@ void RfidReaderAgent::send_query() {
 	rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
 	rfidHeader->slotCounter_=slotCounter_;
+	rfidHeader->colCounter_=collisions_;
+	rfidHeader->idlCounter_=idle_;
+	rfidHeader->sucCounter_=success_;
+	rfidHeader->session_=session_;
+	rfidHeader->trace_=trace_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         ipHeader->sport() = here_.port_;
@@ -202,6 +217,11 @@ void RfidReaderAgent::send_query_ajust() {
         rfidHeader->qValue_=qValue_;
 	rfidHeader->tagEPC_=IP_BROADCAST;
 	rfidHeader->slotCounter_=slotCounter_;
+	rfidHeader->colCounter_=collisions_;
+        rfidHeader->idlCounter_=idle_;
+        rfidHeader->sucCounter_=success_;
+	rfidHeader->session_=session_;
+	rfidHeader->trace_=trace_;
         if (debug_) printf("New qValue=%i\n",rfidHeader->qValue_);
 	ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->dport() = ipHeader->sport();
@@ -228,6 +248,11 @@ void RfidReaderAgent::send_query_reply() {
 	rfidHeader->tagEPC_=tagEPC_;
 	rfidHeader->rng16_=rng16_;
 	rfidHeader->slotCounter_=slotCounter_;
+	rfidHeader->colCounter_=collisions_;
+        rfidHeader->idlCounter_=idle_;
+        rfidHeader->sucCounter_=success_;
+	rfidHeader->session_=session_;
+	rfidHeader->trace_=trace_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         //Sends the packet
@@ -250,6 +275,11 @@ void RfidReaderAgent::send_query_reply_update_slot() {
         rfidHeader->qValue_=qValue_;
         rfidHeader->tagEPC_=IP_BROADCAST;
 	rfidHeader->slotCounter_=slotCounter_;
+	rfidHeader->colCounter_=collisions_;
+        rfidHeader->idlCounter_=idle_;
+        rfidHeader->sucCounter_=success_;
+	rfidHeader->session_=session_;
+	rfidHeader->trace_=trace_;
         ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
         ipHeader->saddr() = here_.addr_; //Source: reader ip
         //Sends the packet
@@ -259,15 +289,22 @@ void RfidReaderAgent::send_query_reply_update_slot() {
 void RfidReaderAgent::start_sing() {
 	 slotCounter_++;
 	 if (counter_==0) {
-                if (debug_) printf("NO TAGS RESPONSES!!\n");
-                Qfp_=fmax(0,Qfp_ - c_);
+		if (debug_) printf("NO TAGS RESPONSES!!\n");
+                idle_++;
+		Qfp_=fmax(0,Qfp_ - c_);
                 if (Qfp_>15) {
                         Qfp_=15;
                 }
 
-		if (qValue_!=-1) qValue_=round(Qfp_);
+		if (qValue_!=-1) {
+			qValue_=round(Qfp_);
+			if (qValue_>=bigQ_) bigQ_=qValue_;
+			//else if((bigQ_-2)==qValue_){printf("Diminuindo(%d)(%d)...\n",total_,uniqCounter_);}
+	                if (qValue_==-1) return;
+
+		}
                 if (debug_) printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
-                send_query_ajust();
+                //send_query_ajust(); //MODIFIQUEI AQUI
 		if (qValue_>0) {
 			send_query_ajust();
 			rs_timer_.resched(t2_);
@@ -278,25 +315,42 @@ void RfidReaderAgent::start_sing() {
 			rs_timer_.resched(t2_);
 		}
 		else if (qValue_==-1) {
-			printf("Slots number: %d\n",slotCounter_);
+			//printf("Slots number: %d\n",slotCounter_);
+			//printf("Bigest Q: %d\n",bigQ_);
+			//printf("Total collision slots: %d\n",total_);
 			return;
 		}
         }
         if (counter_==1) {
                 if (debug_) printf("JUST ONE TAG REPLY!!\n");
+		//printf("Collisons slots: %d\n",collisions_);
+		//printf("Idle slots: %d\n",idle_);
+		//printf("Provavalmente restam ainda %d tags\n",2*collisions_);
+		uniqCounter_++;
+		success_++;
+		total_=total_+collisions_;
 		counter_=0;
+		//idle_=0;
+		//collisions_=0;
 		send_query_reply();
 		send_query_reply_update_slot();
 		rs_timer_.resched(t2_);
 
         }
 	if (counter_>1) {
-                if (debug_) printf("COLLISION - (%d) tags replied\n",counter_);
-                Qfp_=fmin(15,Qfp_ + c_);
+      		//printf("Collisions: %d\n",counter_);
+		//total_=total_+counter_;
+		if (debug_) printf("COLLISION - (%d) tags replied\n",counter_);
+                collisions_++;
+		Qfp_=fmin(15,Qfp_ + c_);
                 if (Qfp_<0) {
                         Qfp_=0;
                 }
                 qValue_=round(Qfp_);
+		if (qValue_>=bigQ_) {
+			bigQ_=qValue_;
+		}
+		//else if((bigQ_-2)==qValue_){printf("Diminuindo(%d)(%d)...\n",total_,uniqCounter_);}
                 if (debug_) printf("Qfp=%1f - Q=%d\n",Qfp_,qValue_);
                 counter_=0;
 		send_query_ajust();
@@ -309,4 +363,3 @@ void RfidReaderAgent::start_sing() {
 void RetransmitTimer::expire(Event *e) {
 	a_->start_sing();
 }
-
