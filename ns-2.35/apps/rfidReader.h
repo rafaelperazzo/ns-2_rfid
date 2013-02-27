@@ -113,6 +113,7 @@ public:
 	int uniqCounter_;
 	int session_; //Query counter
 	int trace_; //1 - Simple trace 0 - Normal trace
+	int tagIP_;
 };
 
 //#endif // ns_rfidReader_h

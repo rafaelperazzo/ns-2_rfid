@@ -85999,3 +85999,453 @@ end simulation
 num_nodes is set 501
 channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
 highestAntennaZ_ = 1.5,  distCST_ = 549.1
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 50
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.50.1.tr
+motion.50.1.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 50
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.50.2.tr
+motion.50.2.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 50
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.50.3.tr
+motion.50.3.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 50
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.50.4.tr
+motion.50.4.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 50
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.50.5.tr
+motion.50.5.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 60
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.60.1.tr
+motion.60.1.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 60
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.60.2.tr
+motion.60.2.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 60
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.60.3.tr
+motion.60.3.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 60
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.60.4.tr
+motion.60.4.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 60
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.60.5.tr
+motion.60.5.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 70
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.70.1.tr
+motion.70.1.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 70
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.70.2.tr
+motion.70.2.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 70
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.70.3.tr
+motion.70.3.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 70
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.70.4.tr
+motion.70.4.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 70
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.70.5.tr
+motion.70.5.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.1.tr
+motion.103.1.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.2.tr
+motion.103.2.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.3.tr
+motion.103.3.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.4.tr
+motion.103.4.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.5.tr
+motion.103.5.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.6.tr
+motion.103.6.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.7.tr
+motion.103.7.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.8.tr
+motion.103.8.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.9.tr
+motion.103.9.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.10.tr
+motion.103.10.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.11.tr
+motion.103.11.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.12.tr
+motion.103.12.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.13.tr
+motion.103.13.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.14.tr
+motion.103.14.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.15.tr
+motion.103.15.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.16.tr
+motion.103.16.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.17.tr
+motion.103.17.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.18.tr
+motion.103.18.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.19.tr
+motion.103.19.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.20.tr
+motion.103.20.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.21.tr
+motion.103.21.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.22.tr
+motion.103.22.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.23.tr
+motion.103.23.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.24.tr
+motion.103.24.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.25.tr
+motion.103.25.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.26.tr
+motion.103.26.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.27.tr
+motion.103.27.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.28.tr
+motion.103.28.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.29.tr
+motion.103.29.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 103
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.103.30.tr
+motion.103.30.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 303
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.303.1.tr
+motion.303.1.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 303
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.303.2.tr
+motion.303.2.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 303
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.303.3.tr
+motion.303.3.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 303
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.303.4.tr
+motion.303.4.mov
+warning: Please use -channel as shown in tcl/ex/wireless-mitf.tcl
+INITIALIZE THE LIST xListHead
+SORTING LISTS ...DONE!
+end simulation
+num_nodes is set 303
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 549.1
+rfid.303.5.tr
+motion.303.5.mov

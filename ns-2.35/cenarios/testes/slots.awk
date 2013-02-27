@@ -25,6 +25,9 @@ END {
    sessao=ses[0];
    ident=id[0];
    total=0;
+   #for(j=0;j<length(col);j++){
+   #	printf("%d %d %d\n",col[j],idl[j],suc[j]);
+   #}
    for(j=0;j<length(col);j++){
 	 #if ( (ses[j]!=sessao)||(id[j]!=ident) ) {
 	 if (ses[j]>sessao) {
