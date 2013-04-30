@@ -92,15 +92,17 @@ public:
 	double c_; //constanc c from Q algorithm
 	int debug_; //View debug messages
 	enum FLUXO {FLOW_RT=0, FLOW_TR=1,FLOW_RT_ACK=2}flow;
-	enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2}service;
+	enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2, SERVICE_EBTSA=3}service;
 	enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
 	enum READER_STATE{RS_SELECT=0,RS_INVENTORY=1,RS_ACCESS=2}reader_state;
-	enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4, TC_REPLY=5}reader_command;
+	enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4, TC_REPLY=5, RC_EST=6, TR_EST_REPLY=7}reader_command;
 	void resend();
 	void send_query(); //Initial command
+	void send_query_estimate(); //Initial estimate command
 	void send_query_ajust(); //QueryAdjust
 	void send_query_reply(); //QueryReply
 	void start_sing(); 
+	void start_est();
 	void send_query_reply_update_slot();
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
@@ -114,6 +116,9 @@ public:
 	int session_; //Query counter
 	int trace_; //1 - Simple trace 0 - Normal trace
 	int tagIP_;
+	int mechanism_; //QoS Mechanism - 0 off - 1 on
+	int finalQ_; //Estimated Q Value
+	int operation_; //0 - Singularization; 1 - Estimation
 };
 
 //#endif // ns_rfidReader_h

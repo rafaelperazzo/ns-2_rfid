@@ -27,6 +27,7 @@ struct hdr_rfidPacket {
 	int idlCounter_; //Idle slot counter
 	int session_;
 	int trace_; //Include debug traces
+	int mechanism_; //QoS Mechanism: 0 off - 1 on
 	// Header access methods
 	static int offset_; // required by PacketHeaderManager
 	inline static int& offset() { return offset_; }

@@ -101,9 +101,9 @@ ns will fall back on running the first perl in your path.\\\n\
 The wrong version of perl may break the test suites.\\\n\
 Reconfigure and rebuild ns if this is a problem.\\\n\
 \"\n\
-checkout_executable TCLSH \"/home/rafael/ns-allinone-2.35/bin/tclsh8.5\" tclsh \"\\\n\
+checkout_executable TCLSH \"/home/rafael/Downloads/ns-allinone-2.35/bin/tclsh8.5\" tclsh \"\\\n\
 When configured, ns found the right version of tclsh in\\\n\
-/home/rafael/ns-allinone-2.35/bin/tclsh8.5\n\
+/home/rafael/Downloads/ns-allinone-2.35/bin/tclsh8.5\n\
 but it doesn't seem to be there anymore, so\\\n\
 ns will fall back on running the first tclsh in your path.\\\n\
 The wrong version of tclsh may break the test suites.\\\n\
@@ -19501,6 +19501,7 @@ Agent/RfidReader set Qfp_ 4.0\n\
 Agent/RfidReader set t2_ 0.0025\n\
 Agent/RfidReader set messages_ 0\n\
 Agent/RfidReader set trace_ 0\n\
+Agent/RfidReader set mechanism_ 0\n\
 \n\
 Agent/RfidTag set packetSize_ 4\n\
 Agent/RfidTag set id_ 0\n\

@@ -101,7 +101,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 #Definindo parametros dos agentes
 $reader1 set id_ 200
 $reader1 set singularization_ 0
-$reader1 set service_ 2
+$reader1 set service_ 3
 $reader1 set t2_ 0.001
 $reader1 set c_ 0.3
 $reader1 set messages_ 0
@@ -121,7 +121,8 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 }
 
 for {set i 0} {$i < $val(stop) } { incr i 101} {
-        $ns at $i "$reader1 standard-query-tags"
+        #$ns at $i "$reader1 standard-query-tags"
+	$ns at $i "$reader1 standard-with-estimation"
 }
 
 #$ns at 1.0 "$reader1 query-tags"

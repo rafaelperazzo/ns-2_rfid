@@ -4,21 +4,21 @@
 #$3 - Interval (tics)
 #$4 - Iterations
 rm -f *.tr
-rm -f trace/rate/*.dat
-rm -f trace/rate/*.tar.bz2
-rm -f trace/rate/*.thr
-rm -f trace/rate/*.col
-rm -f trace/rate/*.suc
-rm -f trace/rate/*.idl
-rm -f trace/rate/START_RATE
-rm -f trace/rate/END_RATE
+#rm -f trace/icwn2013/*.dat
+#rm -f trace/icwn2013/*.tar.bz2
+#rm -f trace/icwn2013/*.thr
+#rm -f trace/icwn2013/*.col
+#rm -f trace/icwn2013/*.suc
+#rm -f trace/icwn2013/*.idl
+#rm -f trace/icwn2013/START_RATE
+rm -f trace/icwn2013/END_RATE
 echo $(date) >> START_RATE
 for ((j=$1; j<=$2; j=j+$3))
 do
 	for i in $(seq 1 $4)
 	do
-		setdest -n $(expr $j - 3) -p 2.0 -M 1.5 -t 1800 -x 30 -y 15 > motion.$j.$i.mov
-		ns tracking.tcl rfid.$j.$i.tr $j motion.$j.$i.mov
+		#setdest -n $(expr $j - 3) -p 2.0 -M 1.5 -t 1800 -x 30 -y 15 > motion.$j.$i.mov
+		ns tracking.tcl rfid.$j.$i.tr $j
 		collisions=$(awk -v opt=1 -f slots.awk rfid.$j.$i.tr)
 		idle=$(awk -v opt=2 -f slots.awk rfid.$j.$i.tr)
 		success=$(awk -v opt=3 -f slots.awk rfid.$j.$i.tr)
@@ -28,7 +28,7 @@ do
 		echo $success >> $j.suc
 		echo $thr >> $j.thr
 		tar jcvf rfid.$j.$i.tar.bz2 rfid.$j.$i.tr motion.$j.$i.mov
-		mv rfid.$j.$i.tar.bz2 traces/rate/
+		mv rfid.$j.$i.tar.bz2 traces/icwn2013/
 		rm -f rfid.$j.$i.tr 
 		rm -f motion.$j.$i.mov
 	done
@@ -44,4 +44,4 @@ perl suc.pl $caminho| sort -g > $arquivo3
 perl thr.pl $caminho| sort -g > $arquivo4
 #mv *.tar.bz2 traces/rate/
 echo $(date) >> END_RATE
-mv *.col *.idl *.suc *.thr START_RATE END_RATE *.dat traces/rate/
+mv *.col *.idl *.suc *.thr START_RATE END_RATE *.dat traces/icwn2013/

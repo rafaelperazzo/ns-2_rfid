@@ -16,10 +16,10 @@ set val(rp) DumbAgent ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 15 ;# Y dimension of topography 
 set val(stop) 1800 ;# time of simulation end
-set val(scen) [lindex $argv 2]
+#set val(scen) [lindex $argv 2]
 set ns_ [new Simulator]
 set tracefd [open [lindex $argv 0] w]
-set namtrace [open rfid.nam w] 
+#set namtrace [open rfid.nam w] 
 
 #Transmission power (range: 5m)
 $val(netif) set Pt_ 0.28
@@ -27,14 +27,15 @@ $val(netif) set RXThresh_ 7.64097e-06
 
 $ns_ use-newtrace
 $ns_ trace-all $tracefd
-$ns_ namtrace-all-wireless $namtrace $val(x) $val(y)
+#$ns_ namtrace-all-wireless $namtrace $val(x) $val(y)
 
 # set up topography object
 set topo [new Topography]
 
 $topo load_flatgrid $val(x) $val(y)
 
-set god_ [create-god $val(nn)]
+#set god_ [create-god $val(nn)]
+create-god [expr $val(nn)]
 set chan_1_ [new $val(chan)]
 
 # configure the nodes
@@ -61,7 +62,7 @@ for {set i 0} {$i < $val(nn) } { incr i } {
 }
 
 #Loading nodes movements
-source $val(scen)
+#source $val(scen)
 
 # Provide initial location of RFID reader
 $node_([expr $val(nn)-$nreaders]) set X_ 5
@@ -77,22 +78,22 @@ $node_([expr $val(nn)-$nreaders+2]) set Y_ 5
 $node_([expr $val(nn)-$nreaders+2]) set Z_ 0.0
 
 #LOCALIZAÇÃO ALEATÓRIA DAS TAGS
-#set rng1 [new RNG]
-#$rng1 seed 0
-#set rng2 [new RNG]
-#$rng2 seed 0
+set rng1 [new RNG]
+$rng1 seed 0
+set rng2 [new RNG]
+$rng2 seed 0
 
-#set rng3 [new RNG]
-#$rng3 seed 0
+set rng3 [new RNG]
+$rng3 seed 0
 
 #puts "[$rng2 uniform 0 20]"
 #puts "[$rng3 uniform 10 1000]"
-#for {set i 1} {$i < $val(nn) } { incr i } {
-#      $n($i) set X_ [$rng1 uniform 0 100]
-#      $n($i) set Y_ [$rng2 uniform 0 100]
+for {set i 0} {$i < [expr $val(nn)-$nreaders] } { incr i } {
+      $node_($i) set X_ [$rng1 uniform 0 30]
+      $node_($i) set Y_ [$rng2 uniform 0 15]
       #puts "[$rng2 uniform 0 20]"
-#      $n($i) set Z_ 0.0
-#}
+      $node_($i) set Z_ [$rng3 uniform 0 1.5]
+}
 
 #Setting readers ID and number of readers
 set n1 [expr $val(nn)-$nreaders]
@@ -124,6 +125,7 @@ $reader1 set service_ 2
 $reader1 set t2_ 0.001
 $reader1 set c_ 0.3
 $reader1 set messages_ 0
+$reader1 set mechanism_ 1
 
 $reader2 set id_ 8001
 $reader2 set singularization_ 0
@@ -131,6 +133,7 @@ $reader2 set service_ 2
 $reader2 set t2_ 0.001
 $reader2 set c_ 0.3
 $reader2 set messages_ 0
+$reader2 set mechanism_ 1
 
 $reader3 set id_ 8002
 $reader3 set singularization_ 0
@@ -138,6 +141,7 @@ $reader3 set service_ 2
 $reader3 set t2_ 0.001
 $reader3 set c_ 0.3
 $reader3 set messages_ 0
+$reader3 set mechanism_ 1
 
 #Connecting agents to nodes
 for {set i 0} {$i < [expr $val(nn)-$nreaders] } { incr i } {
@@ -188,26 +192,26 @@ for {set i 0} {$i < [expr $val(nn)-$nreaders]} { incr i } {
 #$ns at 2100.0 "destination"
 #$ns at 2400.0 "destination"
 #$ns at 2700.0 "destination"
-#for {set i 1} {$i < $val(stop) } { incr i 600} {
-#        $ns at $i "destination"
-#}
+for {set i 0} {$i < [expr $val(stop)-$nreaders] } { incr i 50} {
+        $ns_ at $i "destination"
+}
 
-#proc destination {} {
-#      set rng1 [new RNG]
-#      $rng1 seed 0
-#      global ns val n
-#      set time 1.0
-#      set now [$ns_ now]
-#      for {set i 1} {$i<$val(nn)} {incr i} {
-#            set rand1 [$rng1 uniform 0 30]
-#	    set rand2 [$rng1 uniform 0 30]
-#            set xx [$rng1 uniform 0 100]
-#            set yy [$rng1 uniform 0 100]
-#	    set zz [$rng1 uniform 0 0]
-#            $ns_ at $now "$n($i) setdest $xx $yy $zz"
-#      }
+proc destination {} {
+      set rng1 [new RNG]
+      $rng1 seed 0
+      global ns_ val node_
+      set time 1.0
+      set now [$ns_ now]
+      for {set i 0} {$i<[expr $val(nn)-3]} {incr i} {
+            set rand1 [$rng1 uniform 0 30]
+	    set rand2 [$rng1 uniform 0 30]
+            set xx [$rng1 uniform 0 30]
+            set yy [$rng1 uniform 0 15]
+	    set zz [$rng1 uniform 0 1.5]
+            $ns_ at $now "$node_($i) setdest $xx $yy $zz"
+      }
 #      $ns_ at [expr $now+$time] "destination"
-#}
+}
 
 # Telling nodes when the simulation ends
 for {set i 0} {$i < $val(nn) } { incr i } {
@@ -220,11 +224,11 @@ $ns_ at $val(stop) "stop"
 $ns_ at $val(stop) "puts \"end simulation\" ; $ns_ halt"
 
 proc stop {} {
-global ns_ tracefd namtrace
-#global ns tracefd
+#global ns_ tracefd namtrace
+global ns_ tracefd
 $ns_ flush-trace
 close $tracefd
-close $namtrace
+#close $namtrace
 #exec nam rfid.nam &
 }
 $ns_ run

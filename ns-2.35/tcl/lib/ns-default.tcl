@@ -839,6 +839,7 @@ Agent/RfidReader set Qfp_ 4.0
 Agent/RfidReader set t2_ 0.0025
 Agent/RfidReader set messages_ 0
 Agent/RfidReader set trace_ 0
+Agent/RfidReader set mechanism_ 0
 
 Agent/RfidTag set packetSize_ 4
 Agent/RfidTag set id_ 0

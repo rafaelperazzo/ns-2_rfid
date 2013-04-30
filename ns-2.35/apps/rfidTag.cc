@@ -130,8 +130,9 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		*/
 		//make reply packet
 		memory_=hdr->qValue_;
-		id_=hdr->id_;
+		//id_=hdr->id_; //REMOVED - 02/03/2013
 	        if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {
+			id_=hdr->id_;
 			updateSlot();
 			if (slot_==0) {
 	                        state_=T_REPLY;
@@ -143,22 +144,26 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 
 		}
 		else if ((hdr->command_==RC_QUERY)&&(state_==T_ACKNOWLEDGED)) {
-                        state_=T_READY;
-			updateSlot();
-                        if (slot_==0) {
-                                state_=T_REPLY;
-                                sendPacket(pkt,RC_QUERY);
-                        }
-                        else {
+			if ((hdr->mechanism_==0)||(id_!=hdr->id_)) {
+				id_=hdr->id_;
+                        	state_=T_READY;
+				updateSlot();
+                        	if (slot_==0) {
+                                	state_=T_REPLY;
+	                                sendPacket(pkt,RC_QUERY);
+        	                }
+                	        else {
                                 state_=T_ARBITRATE;
-                        }
+                        	}
+			}
 
                 }
 
 		else if ((hdr->command_==RC_QUERYADJUST)&&(state_!=T_ACKNOWLEDGED)) {
-		     	updateSlot();
+     			id_=hdr->id_;
+			updateSlot();
 			if (slot_==0) {
-		                state_=T_READY;
+		                state_=T_REPLY;
 		                sendPacket(pkt,RC_QUERYADJUST);
        			}
        			else {
@@ -166,22 +171,39 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 		        }
 		}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==tagEPC_)) {
+			id_=hdr->id_;
 			state_=T_ACKNOWLEDGED;
 			slot_--;
 		        if (debug_) printf("(TAG IDENTIFIED) [%d] state(%d): slot value : %d\n",tagEPC_,state_,slot_);
 			sendPacket(pkt,TC_REPLY);
 	  	}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(hdr->tagEPC_==IP_BROADCAST)&&(slot_>0)) {
+			id_=hdr->id_;
 			if (state_!=T_ACKNOWLEDGED) {
 				slot_=slot_-1;
 			        if (debug_) printf("tag [%d] updated slot to (%d)\n",tagEPC_,slot_);
 				if (slot_==0) {
-                	                state_=T_READY;
+                	                state_=T_REPLY;
                         	        sendPacket(pkt,RC_QUERYREPLY);
                         	}
                         	else {
                                 	state_=T_ARBITRATE;
                         	}
+			}
+		}
+	}
+	else if (hdr->service_==SERVICE_EBTSA) { 
+		memory_=hdr->qValue_; //Storing received Q Value in memory		
+		if (hdr->command_==RC_EST) {
+			state_=T_ARBITRATE;
+			updateSlot(); //UPDATING SLOT
+			printf("Generated slot number: %d\n",slot_);
+			if (slot_==0) {			
+				state_=T_REPLY;				
+				sendPacket(pkt,TR_EST_REPLY);
+			}
+			else {
+				state_=T_ARBITRATE;			
 			}
 		}
 	}
@@ -200,7 +222,7 @@ void RfidTagAgent::updateSlot() {
 	Random::seed_heuristically();
 	rng16_=Random::uniform(0,pow(2,memory_)-1);
         if (state_!=T_ACKNOWLEDGED) {
-		slot_=round(rng16_);
+		slot_=trunc(rng16_);
 	}
         if (debug_) printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
 }
