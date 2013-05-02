@@ -66,7 +66,7 @@ public:
 } class_rfidReader;
 
 
-RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),counter_(0),rs_timer_(this),slotCounter_(0), collisions_(0), idle_(0),success_(0),total_(0),uniqCounter_(0),session_(0),operation_(0)
+RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),counter_(0),rs_timer_(this),slotCounter_(0), collisions_(0), idle_(0),success_(0),total_(0),uniqCounter_(0),session_(0),operation_(0), estCounter_(1), slotEstCounter_(0), rebuttal_(0)
 {
 	bind("packetSize_", &size_);
 	bind("tagEPC_",&tagEPC_);
@@ -81,6 +81,7 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 	bind("Qfp_",&Qfp_);
 	bind("trace_",&trace_);
 	bind("mechanism_",&mechanism_);
+	bind("estConstant_",&estConstant_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -106,6 +107,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
     }
     else if (strcmp(argv[1], "standard-with-estimation") == 0) {
 	operation_=1;	
+	estCounter_=1;
 	bigQ_=qValue_;
 	collisions_=0;
 	idle_=0;
@@ -114,6 +116,8 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	slotCounter_=0;
 	total_=0;
 	uniqCounter_=0;
+	slotEstCounter_=0;
+	rebuttal_=0;
 	send_query_estimate();
 	rs_timer_.resched(t2_); //Wait for tags responses
 	return (TCL_OK);
@@ -422,8 +426,23 @@ void RfidReaderAgent::start_sing() {
         }
 }
 
+void RfidReaderAgent::reset_est(int soma) { //If soma=0 (-) if soma=1 (+) otherwise do not change
+	estCounter_=1;
+	collisions_=0;
+	idle_=0;
+	success_=0;
+	counter_=0;
+	if (soma==0) {
+		Qfp_=Qfp_-c_;	
+	}
+	else if (soma==1){
+		Qfp_=Qfp_+c_;	
+	}
+	qValue_=round(Qfp_);
+}
+
 void RfidReaderAgent::start_est() {
-	slotCounter_++;
+	slotEstCounter_++;
 	if (counter_==0) { //idle
 		idle_++;
         }
@@ -434,7 +453,44 @@ void RfidReaderAgent::start_est() {
 	if (counter_>1) { //collision
       		collisions_++;
         }
-	printf("Col: %d\n Suc: %d\n Idl: %d\n",collisions_,success_,idle_);
+	printf("Rodada: %d\n",estCounter_);
+	estCounter_++;
+	if (estCounter_==(estConstant_+1)) {
+		printf("Col: %d\n Suc: %d\n Idl: %d\n",collisions_,success_,idle_);
+		printf("Q= %d\n",qValue_);	
+		if (idle_==estConstant_) { //All idle
+			reset_est(0); //decrease Q
+			//printf("Qfp: %.2f\n",Qfp_);
+			send_query_estimate(); //Restart
+			rs_timer_.resched(t2_);	
+		}
+		else if (collisions_==estConstant_) { //All collisions
+			reset_est(1); //increase Q
+			//printf("Qfp: %.2f\n",Qfp_);
+			send_query_estimate();	//Restart
+			rs_timer_.resched(t2_);
+		}
+		else {
+			printf("ENTREI!\n");	
+			if (rebuttal_==0) {			
+				finalQ_=qValue_;
+				//Rebuttal 
+				rebuttal_++;
+				reset_est(2);
+				send_query_estimate();	//Restart
+				rs_timer_.resched(t2_);
+			}
+			else {
+				printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
+			}
+					
+		}
+	}
+	else {
+		send_query_estimate();	
+		rs_timer_.resched(t2_);
+	}
+	//printf("Total de slots na estimacao: %d\n",slotEstCounter_);
 }
 
 void RetransmitTimer::expire(Event *e) {

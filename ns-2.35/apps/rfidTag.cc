@@ -192,12 +192,12 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 			}
 		}
 	}
-	else if (hdr->service_==SERVICE_EBTSA) { 
+	else if (hdr->service_==SERVICE_EBTSA) { //EBTSA ALGORITHM
 		memory_=hdr->qValue_; //Storing received Q Value in memory		
 		if (hdr->command_==RC_EST) {
 			state_=T_ARBITRATE;
 			updateSlot(); //UPDATING SLOT
-			printf("Generated slot number: %d\n",slot_);
+			//printf("Generated slot number: %d\n",slot_);
 			if (slot_==0) {			
 				state_=T_REPLY;				
 				sendPacket(pkt,TR_EST_REPLY);

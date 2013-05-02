@@ -1,503 +1,105 @@
-num_nodes is set 500
+end simulation
+num_nodes is set 80
 channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
 highestAntennaZ_ = 1.5,  distCST_ = 549.1
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 1023 tags
-Provavalmente restam ainda 2047 tags
-Provavalmente restam ainda 8191 tags
-Provavalmente restam ainda 8191 tags
-Provavalmente restam ainda 8191 tags
-Provavalmente restam ainda 8191 tags
-Provavalmente restam ainda 1023 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 511 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 255 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 127 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 63 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 15 tags
-Provavalmente end simulation
-restam ainda 15 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 31 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 15 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 3 tags
-Provavalmente restam ainda 3 tags
-Provavalmente restam ainda 3 tags
-Provavalmente restam ainda 7 tags
-Provavalmente restam ainda 3 tags
-Provavalmente restam ainda 3 tags
-Provavalmente restam ainda 1 tags
-Provavalmente restam ainda 1 tags
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 4
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 4
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 5
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 5
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 6
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 6
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 6
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 7
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 7
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 0
+ Suc: 0
+ Idl: 3
+Q= 8
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 0
+ Suc: 3
+ Idl: 0
+Q= 7
+ENTREI!
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 3
+ Suc: 0
+ Idl: 0
+Q= 7
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 0
+ Suc: 0
+ Idl: 3
+Q= 8
+Rodada: 1
+Rodada: 2
+Rodada: 3
+Col: 2
+ Suc: 0
+ Idl: 1
+Q= 7
+ENTREI!
+O numero estimado de tags eh: 128

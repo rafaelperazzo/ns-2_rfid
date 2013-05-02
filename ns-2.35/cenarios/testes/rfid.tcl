@@ -103,7 +103,8 @@ $reader1 set id_ 200
 $reader1 set singularization_ 0
 $reader1 set service_ 3
 $reader1 set t2_ 0.001
-$reader1 set c_ 0.3
+$reader1 set c_ 0.4
+$reader1 set estConstant_ 3
 $reader1 set messages_ 0
 
 #CONECTANDO NOS AOS AGENTES

@@ -102,6 +102,7 @@ public:
 	void send_query_ajust(); //QueryAdjust
 	void send_query_reply(); //QueryReply
 	void start_sing(); 
+	void reset_est(int soma);
 	void start_est();
 	void send_query_reply_update_slot();
 	double t2_; //slot time
@@ -119,6 +120,10 @@ public:
 	int mechanism_; //QoS Mechanism - 0 off - 1 on
 	int finalQ_; //Estimated Q Value
 	int operation_; //0 - Singularization; 1 - Estimation
+	int estCounter_; //Estimation counter
+	int estConstant_; //Constant estimation - Default =3
+	int slotEstCounter_;
+	int rebuttal_;
 };
 
 //#endif // ns_rfidReader_h
