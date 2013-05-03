@@ -438,7 +438,9 @@ void RfidReaderAgent::reset_est(int soma) { //If soma=0 (-) if soma=1 (+) otherw
 	else if (soma==1){
 		Qfp_=Qfp_+c_;	
 	}
-	qValue_=round(Qfp_);
+	else if (soma==2) {
+		qValue_=round(Qfp_);
+	}
 }
 
 void RfidReaderAgent::start_est() {
@@ -448,7 +450,6 @@ void RfidReaderAgent::start_est() {
         }
         if (counter_==1) { //success
                 success_++;
-		printf("SUCESSO! Q=(%d)\n",qValue_);
 
         }
 	if (counter_>1) { //collision
@@ -459,20 +460,20 @@ void RfidReaderAgent::start_est() {
 	if (estCounter_==(estConstant_+1)) {
 		//printf("Col: %d\n Suc: %d\n Idl: %d\n",collisions_,success_,idle_);
 		//printf("Q= %d\n",qValue_);	
-		if (idle_==estConstant_) { //All idle
+		if ((idle_==estConstant_)&&(rebuttal_==0)) { //All idle
 			reset_est(0); //decrease Q
 			//printf("Qfp: %.2f\n",Qfp_);
 			send_query_estimate(); //Restart
 			rs_timer_.resched(t2_);	
 		}
-		else if (collisions_==estConstant_) { //All collisions
+		else if ((collisions_==estConstant_)&&(rebuttal_==0)) { //All collisions
 			reset_est(1); //increase Q
 			//printf("Qfp: %.2f\n",Qfp_);
 			send_query_estimate();	//Restart
 			rs_timer_.resched(t2_);
 		}
 		else {
-			//printf("ENTREI!\n");	
+				
 			if (rebuttal_==0) {			
 				finalQ_=qValue_;
 				//Rebuttal 
@@ -482,8 +483,17 @@ void RfidReaderAgent::start_est() {
 				rs_timer_.resched(t2_);
 			}
 			else {
-				printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
-				printf("Total de slots: %d\n",slotEstCounter_);
+				if (finalQ_==qValue_) { //Estimated Q found!
+					printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
+					printf("Total de slots: %d\n",slotEstCounter_);
+				}
+				else { //Restart				
+					qValue_=finalQ_;
+					reset_est(2);
+					rebuttal_=0;
+					send_query_estimate(); //Restart
+					rs_timer_.resched(t2_);					
+				}
 			}
 
 		}
