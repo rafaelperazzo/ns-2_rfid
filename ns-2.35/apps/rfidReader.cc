@@ -448,16 +448,17 @@ void RfidReaderAgent::start_est() {
         }
         if (counter_==1) { //success
                 success_++;
+		printf("SUCESSO! Q=(%d)\n",qValue_);
 
         }
 	if (counter_>1) { //collision
       		collisions_++;
         }
-	printf("Rodada: %d\n",estCounter_);
+	//printf("Rodada: %d\n",estCounter_);
 	estCounter_++;
 	if (estCounter_==(estConstant_+1)) {
-		printf("Col: %d\n Suc: %d\n Idl: %d\n",collisions_,success_,idle_);
-		printf("Q= %d\n",qValue_);	
+		//printf("Col: %d\n Suc: %d\n Idl: %d\n",collisions_,success_,idle_);
+		//printf("Q= %d\n",qValue_);	
 		if (idle_==estConstant_) { //All idle
 			reset_est(0); //decrease Q
 			//printf("Qfp: %.2f\n",Qfp_);
@@ -471,7 +472,7 @@ void RfidReaderAgent::start_est() {
 			rs_timer_.resched(t2_);
 		}
 		else {
-			printf("ENTREI!\n");	
+			//printf("ENTREI!\n");	
 			if (rebuttal_==0) {			
 				finalQ_=qValue_;
 				//Rebuttal 
@@ -482,8 +483,9 @@ void RfidReaderAgent::start_est() {
 			}
 			else {
 				printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
+				printf("Total de slots: %d\n",slotEstCounter_);
 			}
-					
+
 		}
 	}
 	else {
@@ -493,6 +495,7 @@ void RfidReaderAgent::start_est() {
 	//printf("Total de slots na estimacao: %d\n",slotEstCounter_);
 }
 
+
 void RetransmitTimer::expire(Event *e) {
 	if (a_->operation_==0) { //Singularization	
 		a_->start_sing();
@@ -501,3 +504,4 @@ void RetransmitTimer::expire(Event *e) {
 		a_->start_est();
 	}
 }
+
