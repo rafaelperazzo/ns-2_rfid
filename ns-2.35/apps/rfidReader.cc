@@ -426,20 +426,50 @@ void RfidReaderAgent::start_sing() {
         }
 }
 
-void RfidReaderAgent::reset_est(int soma) { //If soma=0 (-) if soma=1 (+) otherwise do not change
+void RfidReaderAgent::reset_est() { //If soma=0 (-) if soma=1 (+) otherwise do not change
 	estCounter_=1;
 	collisions_=0;
 	idle_=0;
 	success_=0;
 	counter_=0;
-	if (soma==0) {
+	/*if (soma==0) {
 		Qfp_=Qfp_-c_;	
 	}
 	else if (soma==1){
-		Qfp_=Qfp_+c_;	
+		Qfp_=Qfp_+c_;	 
+		if (Qfp_>15) Qfp_=4;
 	}
 	else if (soma==2) {
 		qValue_=round(Qfp_);
+	}
+	qValue_=round(Qfp_);*/
+}
+
+void RfidReaderAgent::update_Q(int soma) {
+	
+	if (soma==0) {
+		Qfp_=Qfp_-c_;
+	}
+	else if (soma==1){
+		Qfp_=Qfp_+c_;
+		if (Qfp_>15) Qfp_=4;
+	}
+	qValue_=round(Qfp_);
+	printf("Q mudou para: %d\n",qValue_);	
+}
+
+void RfidReaderAgent::check_rebuttal() {
+	if (finalQ_==qValue_) { //Estimated Q found!
+		printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
+		printf("Total de slots: %d\n",slotEstCounter_);
+	}
+	else { //Restart									
+		qValue_=finalQ_;
+		reset_est();
+		update_Q(2);
+		rebuttal_=0;
+		send_query_estimate(); //Restart
+		rs_timer_.resched(t2_);					
 	}
 }
 
@@ -450,6 +480,7 @@ void RfidReaderAgent::start_est() {
         }
         if (counter_==1) { //success
                 success_++;
+		printf("SUCESSO: %d\n",qValue_);
 
         }
 	if (counter_>1) { //collision
@@ -458,42 +489,55 @@ void RfidReaderAgent::start_est() {
 	//printf("Rodada: %d\n",estCounter_);
 	estCounter_++;
 	if (estCounter_==(estConstant_+1)) {
-		//printf("Col: %d\n Suc: %d\n Idl: %d\n",collisions_,success_,idle_);
-		//printf("Q= %d\n",qValue_);	
-		if ((idle_==estConstant_)&&(rebuttal_==0)) { //All idle
-			reset_est(0); //decrease Q
-			//printf("Qfp: %.2f\n",Qfp_);
-			send_query_estimate(); //Restart
-			rs_timer_.resched(t2_);	
+		printf("Col: %d\n Idl: %d\n Suc: %d\n",collisions_,idle_,success_);		
+		if ((idle_==estConstant_)) { //All idle			
+			if (rebuttal_==0) {						
+				reset_est(); //decrease Q				
+				update_Q(0);
+				send_query_estimate(); //Restart
+				rs_timer_.resched(t2_);	
+			}
+			else {
+				update_Q(0);	
+			}
 		}
-		else if ((collisions_==estConstant_)&&(rebuttal_==0)) { //All collisions
-			reset_est(1); //increase Q
-			//printf("Qfp: %.2f\n",Qfp_);
-			send_query_estimate();	//Restart
-			rs_timer_.resched(t2_);
-		}
-		else {
-				
+		else if ((collisions_==estConstant_)) { //All collisions
+			printf("Entrou collisions!!\n");			
 			if (rebuttal_==0) {			
-				finalQ_=qValue_;
-				//Rebuttal 
-				rebuttal_++;
-				reset_est(2);
+				reset_est(); //decrease Q				
+				update_Q(1);
 				send_query_estimate();	//Restart
 				rs_timer_.resched(t2_);
 			}
 			else {
-				if (finalQ_==qValue_) { //Estimated Q found!
+				update_Q(1);
+			}
+		}
+		else if ((collisions_<estConstant_)&&(idle_<estConstant_)) {
+			printf("Entrou outro!!\n");	
+			if (rebuttal_==0) {						
+				finalQ_=qValue_;
+				//Rebuttal 
+				rebuttal_++;
+				reset_est();
+				update_Q(2);
+				send_query_estimate();	//Restart
+				rs_timer_.resched(t2_);
+			}
+			else {
+				/*if (finalQ_==qValue_) { //Estimated Q found!
 					printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
 					printf("Total de slots: %d\n",slotEstCounter_);
 				}
-				else { //Restart				
+				else { //Restart									
 					qValue_=finalQ_;
-					reset_est(2);
+					reset_est();
+					update_Q(2);
 					rebuttal_=0;
 					send_query_estimate(); //Restart
 					rs_timer_.resched(t2_);					
-				}
+				}*/
+				check_rebuttal();
 			}
 
 		}
@@ -502,7 +546,6 @@ void RfidReaderAgent::start_est() {
 		send_query_estimate();	
 		rs_timer_.resched(t2_);
 	}
-	//printf("Total de slots na estimacao: %d\n",slotEstCounter_);
 }
 
 

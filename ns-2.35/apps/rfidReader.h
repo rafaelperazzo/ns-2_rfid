@@ -103,8 +103,10 @@ public:
 	void send_query_ajust(); //QueryAdjust
 	void send_query_reply(); //QueryReply
 	void start_sing(); 
-	void reset_est(int soma);
+	void reset_est();
 	void start_est();
+	void update_Q(int soma);
+	void check_rebuttal();
 	void send_query_reply_update_slot();
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
