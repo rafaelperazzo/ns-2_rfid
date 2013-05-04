@@ -206,6 +206,9 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 				state_=T_ARBITRATE;			
 			}
 		}
+		if (hdr->command_==RC_EST_FINISH) {
+			state_=T_READY;		
+		}
 	}
   }
   else if (hdr->tipo_==FLOW_RT_ACK) { //Tag recebe um ACK

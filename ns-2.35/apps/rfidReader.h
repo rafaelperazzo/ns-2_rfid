@@ -96,7 +96,7 @@ public:
 	enum SERVICE {SERVICE_NOSERVICE=0, SERVICE_TRACKING=1,SERVICE_STANDARD=2, SERVICE_EBTSA=3}service;
 	enum SINGULARIZATION {SING_NOSINGULARIZATION=0, SING_RANDOMTIME=1}singularization;
 	enum READER_STATE{RS_SELECT=0,RS_INVENTORY=1,RS_ACCESS=2}reader_state;
-	enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4, TC_REPLY=5, RC_EST=6, TR_EST_REPLY=7}reader_command;
+	enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4, TC_REPLY=5, RC_EST=6, TR_EST_REPLY=7, RC_EST_FINISH=8}reader_command;
 	void resend();
 	void send_query(); //Initial command
 	void send_query_estimate(); //Initial estimate command
@@ -107,6 +107,7 @@ public:
 	void start_est();
 	void update_Q(int soma);
 	void check_rebuttal();
+	void finish(int dest);
 	void send_query_reply_update_slot();
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
@@ -121,7 +122,7 @@ public:
 	int trace_; //1 - Simple trace 0 - Normal trace
 	int tagIP_;
 	int mechanism_; //QoS Mechanism - 0 off - 1 on
-	int finalQ_; //Estimated Q Value
+	float finalQ_; //Estimated Q Value
 	int operation_; //0 - Singularization; 1 - Estimation
 	int estCounter_; //Estimation counter
 	int estConstant_; //Constant estimation - Default =3

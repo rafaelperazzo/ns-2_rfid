@@ -232,6 +232,37 @@ void RfidReaderAgent::send_query() {
 
 }
 
+void RfidReaderAgent::finish(int dest) {
+
+	Packet* pkt = allocpkt(); 
+        //Create network header
+        hdr_ip* ipHeader = HDR_IP(pkt);
+        //Create RFID header
+        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
+	rfidHeader->command_=RC_EST_FINISH;
+	rfidHeader->qValue_=round(finalQ_);
+	rfidHeader->tagEPC_=dest;
+	rfidHeader->slotCounter_=slotEstCounter_;
+	rfidHeader->colCounter_=collisions_;
+	rfidHeader->idlCounter_=idle_;
+	rfidHeader->sucCounter_=success_;
+	rfidHeader->session_=session_;
+	rfidHeader->trace_=trace_;
+	rfidHeader->mechanism_=mechanism_;
+        ipHeader->daddr() = dest; //Destination: broadcast
+        ipHeader->saddr() = here_.addr_; //Source: reader ip
+        ipHeader->sport() = here_.port_;
+        //Sends the packet
+        send(pkt, (Handler*) 0);
+	//Packet::free(pkt);
+
+}
+
 void RfidReaderAgent::send_query_estimate() {
 
 	Packet* pkt = allocpkt(); 
@@ -432,17 +463,6 @@ void RfidReaderAgent::reset_est() { //If soma=0 (-) if soma=1 (+) otherwise do n
 	idle_=0;
 	success_=0;
 	counter_=0;
-	/*if (soma==0) {
-		Qfp_=Qfp_-c_;	
-	}
-	else if (soma==1){
-		Qfp_=Qfp_+c_;	 
-		if (Qfp_>15) Qfp_=4;
-	}
-	else if (soma==2) {
-		qValue_=round(Qfp_);
-	}
-	qValue_=round(Qfp_);*/
 }
 
 void RfidReaderAgent::update_Q(int soma) {
@@ -455,16 +475,19 @@ void RfidReaderAgent::update_Q(int soma) {
 		if (Qfp_>15) Qfp_=4;
 	}
 	qValue_=round(Qfp_);
-	printf("Q mudou para: %d\n",qValue_);	
+	//printf("Q mudou para: %d\n",qValue_);	
 }
 
 void RfidReaderAgent::check_rebuttal() {
-	if (finalQ_==qValue_) { //Estimated Q found!
-		printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
-		printf("Total de slots: %d\n",slotEstCounter_);
+	if ((finalQ_==Qfp_)) { //Estimated Q found!
+		reset_est();		
+		finish(IP_BROADCAST);		
+		//printf("O numero estimado de tags eh: %.0f(%.0f)\n",pow(2,round(finalQ_)),round(finalQ_));
+		//printf("Total de slots: %d\n",slotEstCounter_);
 	}
 	else { //Restart									
-		qValue_=finalQ_;
+		Qfp_=finalQ_;
+		qValue_=round(Qfp_);
 		reset_est();
 		update_Q(2);
 		rebuttal_=0;
@@ -480,16 +503,15 @@ void RfidReaderAgent::start_est() {
         }
         if (counter_==1) { //success
                 success_++;
-		printf("SUCESSO: %d\n",qValue_);
+		//printf("SUCESSO: %d\n",qValue_);
 
         }
 	if (counter_>1) { //collision
       		collisions_++;
         }
-	//printf("Rodada: %d\n",estCounter_);
 	estCounter_++;
 	if (estCounter_==(estConstant_+1)) {
-		printf("Col: %d\n Idl: %d\n Suc: %d\n",collisions_,idle_,success_);		
+		//printf("Col: %d\n Idl: %d\n Suc: %d\n",collisions_,idle_,success_);		
 		if ((idle_==estConstant_)) { //All idle			
 			if (rebuttal_==0) {						
 				reset_est(); //decrease Q				
@@ -499,10 +521,11 @@ void RfidReaderAgent::start_est() {
 			}
 			else {
 				update_Q(0);	
+				check_rebuttal();
 			}
 		}
 		else if ((collisions_==estConstant_)) { //All collisions
-			printf("Entrou collisions!!\n");			
+			//printf("Entrou collisions!!\n");			
 			if (rebuttal_==0) {			
 				reset_est(); //decrease Q				
 				update_Q(1);
@@ -511,12 +534,13 @@ void RfidReaderAgent::start_est() {
 			}
 			else {
 				update_Q(1);
+				check_rebuttal();
 			}
 		}
 		else if ((collisions_<estConstant_)&&(idle_<estConstant_)) {
-			printf("Entrou outro!!\n");	
+			//printf("Entrou outro!!\n");	
 			if (rebuttal_==0) {						
-				finalQ_=qValue_;
+				finalQ_=Qfp_;
 				//Rebuttal 
 				rebuttal_++;
 				reset_est();
@@ -525,18 +549,6 @@ void RfidReaderAgent::start_est() {
 				rs_timer_.resched(t2_);
 			}
 			else {
-				/*if (finalQ_==qValue_) { //Estimated Q found!
-					printf("O numero estimado de tags eh: %.0f\n",pow(2,finalQ_));
-					printf("Total de slots: %d\n",slotEstCounter_);
-				}
-				else { //Restart									
-					qValue_=finalQ_;
-					reset_est();
-					update_Q(2);
-					rebuttal_=0;
-					send_query_estimate(); //Restart
-					rs_timer_.resched(t2_);					
-				}*/
 				check_rebuttal();
 			}
 
