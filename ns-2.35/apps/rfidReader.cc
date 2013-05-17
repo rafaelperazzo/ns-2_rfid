@@ -122,6 +122,23 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	rs_timer_.resched(t2_); //Wait for tags responses
 	return (TCL_OK);
     }
+    else if (strcmp(argv[1], "edfsa-query") == 0) {
+	operation_=2;	
+	estCounter_=1;
+	bigQ_=qValue_;
+	collisions_=0;
+	idle_=0;
+	success_=0;
+	session_++;
+	slotCounter_=0;
+	total_=0;
+	uniqCounter_=0;
+	slotEstCounter_=0;
+	rebuttal_=0;
+	query(RC_QUERY,uniqCounter_);
+	rs_timer_.resched(t2_); //Wait for tags responses
+	return (TCL_OK);
+    }
 
   }
 
@@ -176,6 +193,16 @@ void RfidReaderAgent::recv(Packet* pkt, Handler*)
 	tagIP_=hdrip->saddr();
 	rng16_=hdr->rng16_;
   }
+
+  else if ((hdr->tipo_==FLOW_TR)&&(hdr->id_==id_)&&(hdr->service_==SERVICE_EDFSA)) { //EDFSA
+	if (hdr->command_==TC_REPLY) { //SINGULARIZATION
+		counter_++;
+	}
+	tagEPC_=hdr->tagEPC_;
+	tagIP_=hdrip->saddr();
+	rng16_=hdr->rng16_;
+  }  
+
   else if(hdr->tipo_==FLOW_RT){
 	if (debug_) printf("Reader (unknown) received REPLY from (%i)\n",hdr->tagEPC_);
   }
@@ -201,9 +228,40 @@ void RfidReaderAgent::resend() {
         send(pkt, (Handler*) 0);
 }
 
-void RfidReaderAgent::send_query() {
+void RfidReaderAgent::query(int command, int slotNumber) {
 
 	Packet* pkt = allocpkt(); 
+        //Create network header
+        hdr_ip* ipHeader = HDR_IP(pkt);
+        //Create RFID header
+        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
+        //Prepating headers
+        rfidHeader->id_ = id_; //Reader ID
+        rfidHeader->tipo_ = FLOW_RT; //flow direction
+        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
+        rfidHeader->service_=service_;
+	rfidHeader->command_=command;
+	rfidHeader->qValue_=qValue_;
+	rfidHeader->tagEPC_=IP_BROADCAST;
+	rfidHeader->slotCounter_=slotCounter_;
+	rfidHeader->colCounter_=collisions_;
+	rfidHeader->idlCounter_=idle_;
+	rfidHeader->sucCounter_=success_;
+	rfidHeader->session_=session_;
+	rfidHeader->trace_=trace_;
+	rfidHeader->slotNumber_=slotNumber;
+	rfidHeader->mechanism_=mechanism_;
+        ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
+        ipHeader->saddr() = here_.addr_; //Source: reader ip
+        ipHeader->sport() = here_.port_;
+        //Sends the packet
+        send(pkt, (Handler*) 0);
+
+}
+
+void RfidReaderAgent::send_query() {
+
+	/*Packet* pkt = allocpkt(); 
         //Create network header
         hdr_ip* ipHeader = HDR_IP(pkt);
         //Create RFID header
@@ -228,7 +286,8 @@ void RfidReaderAgent::send_query() {
         ipHeader->sport() = here_.port_;
         //Sends the packet
         send(pkt, (Handler*) 0);
-	//Packet::free(pkt);
+	//Packet::free(pkt);*/
+	query(RC_QUERY,0);
 
 }
 
@@ -560,6 +619,32 @@ void RfidReaderAgent::start_est() {
 	}
 }
 
+void RfidReaderAgent::start_edfsa() {
+	slotCounter_++;
+	uniqCounter_++; //next slot
+	if (counter_==0) { //IDLE
+		//printf("Slot %d : IDLE\n",uniqCounter_-1);
+		idle_++;
+        }
+        if (counter_==1) { //SUCCESS
+                //printf("Slot %d : SUCCESS(%d)\n",uniqCounter_-1,tagEPC_);
+		success_++;
+		send_query_reply();
+        }
+	if (counter_>1) { //COLLISION
+      		//printf("Slot %d : COLLISION\n",uniqCounter_-1);
+		collisions_++;
+        }
+	counter_=0;
+	if (uniqCounter_<=trunc(pow(2,qValue_)-1)) {
+		query(RC_SING,uniqCounter_);
+		rs_timer_.resched(t2_);
+	}
+	else {
+		printf("Total slots: %d\n",slotCounter_);
+		printf("FIM\n");
+	}
+}
 
 void RetransmitTimer::expire(Event *e) {
 	if (a_->operation_==0) { //Singularization	
@@ -567,6 +652,9 @@ void RetransmitTimer::expire(Event *e) {
 	}
 	else if (a_->operation_==1) { //Estimation and singularization
 		a_->start_est();
+	}
+	else if (a_->operation_==2) { //Estimation and singularization
+		a_->start_edfsa();
 	}
 }
 

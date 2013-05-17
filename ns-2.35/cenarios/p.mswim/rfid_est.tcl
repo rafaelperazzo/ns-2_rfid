@@ -16,7 +16,7 @@ set val(rp) DumbAgent ;# routing protocol
 #set val(rp) DSDV ;# routing protocol
 set val(x) 30 ;# X dimension of topography
 set val(y) 30 ;# Y dimension of topography 
-set val(stop) 5 ;# time of simulation end
+set val(stop) 8 ;# time of simulation end
 
 set ns [new Simulator]
 set tracefd [open [lindex $argv 0] w]
@@ -102,7 +102,7 @@ for {set i 1} {$i < $val(nn) } { incr i } {
 $reader1 set id_ 200
 $reader1 set singularization_ 0
 $reader1 set service_ 3
-$reader1 set t2_ 0.001
+$reader1 set t2_ 0.01
 $reader1 set c_ 0.3
 $reader1 set qValue_ 4
 $reader1 set Qfp_ 4.0

@@ -22,7 +22,9 @@ do
 		echo "Inicio: $j.$i - " $(date +%d/%m/%y-%k:%M) >> results/LOG
 		ns rfid_est.tcl rfid.$j.$i.tr $j
 		qValue=$(tail -n 1 rfid.$j.$i.tr | awk '{print $17}')
+                slots=$(tail -n 1 rfid.$j.$i.tr | awk '{print $19}')
                 echo $qValue >> results/$j.q
+                echo $slots >> results/$j.slots
 		tar jcvf results/rfid.$j.$i.tar.bz2 rfid.$j.$i.tr
 		rm -f rfid.$j.$i.tr
 		echo "Fim   : $j.$i - " $(date +%d/%m/%y-%k:%M) >> results/LOG

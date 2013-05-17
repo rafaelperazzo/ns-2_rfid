@@ -210,6 +210,35 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 			state_=T_READY;		
 		}
 	}
+	/* ESTIMATED DFSA ALGORITHM **/
+	else if (hdr->service_==SERVICE_EDFSA) { //EDFSA ALGORITHM
+		
+		if (hdr->command_==RC_QUERY) {	//START AND ADJUST
+			memory_=hdr->qValue_; //Storing received Q Value in memory		
+			state_=T_ARBITRATE;
+			updateSlot(); //UPDATING SLOT
+			//printf("[%d] slot (%d)\n",tagEPC_,slot_);	
+			if (hdr->slotNumber_==slot_) { //time to reply
+				state_=T_REPLY;
+				//send packet
+				//printf("[%d] replying at slot %d\n",tagEPC_,slot_);
+				sendPacket(pkt,TC_REPLY);
+			}
+		}
+		else if ((hdr->command_==RC_SING)&&(state_!=T_ACKNOWLEDGED)) {
+			if (hdr->slotNumber_==slot_) { //time to reply
+				state_=T_REPLY;
+				//send packet
+				sendPacket(pkt,TC_REPLY);
+			}
+		}
+		else if (hdr->command_==RC_QUERYREPLY) {
+			state_=T_ACKNOWLEDGED;
+			//printf("[%d] recebeu ACK\n",tagEPC_);
+		}
+
+	}
+
   }
   else if (hdr->tipo_==FLOW_RT_ACK) { //Tag recebe um ACK
 	id_=hdr->id_; //Grava o ID do leitor que confirmou o recebimento
