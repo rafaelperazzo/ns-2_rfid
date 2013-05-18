@@ -213,11 +213,12 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 	/* ESTIMATED DFSA ALGORITHM **/
 	else if (hdr->service_==SERVICE_EDFSA) { //EDFSA ALGORITHM
 		
-		if (hdr->command_==RC_QUERY) {	//START AND ADJUST
+		if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {	//START AND ADJUST
 			memory_=hdr->qValue_; //Storing received Q Value in memory		
 			state_=T_ARBITRATE;
-			updateSlot(); //UPDATING SLOT
+			updateSlot2(); //UPDATING SLOT
 			//printf("[%d] slot (%d)\n",tagEPC_,slot_);	
+			//printf("Q= ---------> (%d) <----------------\n",memory_);
 			if (hdr->slotNumber_==slot_) { //time to reply
 				state_=T_REPLY;
 				//send packet
@@ -232,7 +233,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 				sendPacket(pkt,TC_REPLY);
 			}
 		}
-		else if (hdr->command_==RC_QUERYREPLY) {
+		else if ((hdr->command_==RC_QUERYREPLY)&&(state_!=T_ACKNOWLEDGED)) {
 			state_=T_ACKNOWLEDGED;
 			//printf("[%d] recebeu ACK\n",tagEPC_);
 		}
@@ -253,6 +254,15 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 void RfidTagAgent::updateSlot() {
 	Random::seed_heuristically();
 	rng16_=Random::uniform(0,pow(2,memory_)-1);
+        if (state_!=T_ACKNOWLEDGED) {
+		slot_=trunc(rng16_);
+	}
+        if (debug_) printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
+}
+
+void RfidTagAgent::updateSlot2() {
+	Random::seed_heuristically();
+	rng16_=Random::uniform(0,memory_);
         if (state_!=T_ACKNOWLEDGED) {
 		slot_=trunc(rng16_);
 	}

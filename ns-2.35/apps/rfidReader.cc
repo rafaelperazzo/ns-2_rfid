@@ -635,15 +635,43 @@ void RfidReaderAgent::start_edfsa() {
       		//printf("Slot %d : COLLISION\n",uniqCounter_-1);
 		collisions_++;
         }
-	counter_=0;
-	if (uniqCounter_<=trunc(pow(2,qValue_)-1)) {
+	if (uniqCounter_<=qValue_) {
+		counter_=0;		
 		query(RC_SING,uniqCounter_);
 		rs_timer_.resched(t2_);
 	}
-	else {
-		printf("Total slots: %d\n",slotCounter_);
-		printf("FIM\n");
+	else { //Next frame	
+		temp_=collisions_;		
+		collisions_=0;
+		idle_=0;
+		counter_=0;
+		uniqCounter_=0;
+		calculate_next_Q(temp_,1);				
 	}
+}
+
+void RfidReaderAgent::calculate_next_Q(int col, int method) {
+
+	if (col>0) {
+		if (method==0) { //LOWER BOUND
+			qValue_=2*col;
+			query(RC_QUERY,uniqCounter_);
+			rs_timer_.resched(t2_); //Wait for tags responses			
+		}
+		else if (method==1) {
+			qValue_=round(2.39*col); //SHOUT
+			//printf("Identificadas %d tags\n",success_);
+			//printf("Restam %d tags\n",qValue_);
+			query(RC_QUERY,uniqCounter_);
+			rs_timer_.resched(t2_); //Wait for tags responses
+		}
+	}
+	else {
+		//printf("Total slots: %d\n",slotCounter_);
+		//printf("Identificadas %d tags\n",success_);
+		//printf("FIM\n");
+	}
+
 }
 
 void RetransmitTimer::expire(Event *e) {

@@ -111,6 +111,7 @@ public:
 	void finish(int dest);
 	void send_query_reply_update_slot();
 	void start_edfsa();
+	void calculate_next_Q(int col, int method);
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
 	int slotCounter_; //Total number of slots
@@ -130,6 +131,7 @@ public:
 	int estConstant_; //Constant estimation - Default =3
 	int slotEstCounter_;
 	int rebuttal_;
+	int temp_;
 };
 
 //#endif // ns_rfidReader_h
