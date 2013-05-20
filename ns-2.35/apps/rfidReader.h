@@ -132,6 +132,7 @@ public:
 	int slotEstCounter_;
 	int rebuttal_;
 	int temp_;
+	int estMethod_;
 };
 
 //#endif // ns_rfidReader_h

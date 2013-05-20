@@ -82,6 +82,7 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 	bind("trace_",&trace_);
 	bind("mechanism_",&mechanism_);
 	bind("estConstant_",&estConstant_);
+	bind("estMethod_",&estMethod_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -646,7 +647,7 @@ void RfidReaderAgent::start_edfsa() {
 		idle_=0;
 		counter_=0;
 		uniqCounter_=0;
-		calculate_next_Q(temp_,1);				
+		calculate_next_Q(temp_,estMethod_);				
 	}
 }
 
