@@ -111,7 +111,8 @@ public:
 	void finish(int dest);
 	void send_query_reply_update_slot();
 	void start_edfsa();
-	void calculate_next_Q(int col, int method);
+	void calculate_next_Q(int col, int suc, int method);
+	int eomlee(float error, int col, int suc);
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
 	int slotCounter_; //Total number of slots
@@ -131,8 +132,11 @@ public:
 	int estConstant_; //Constant estimation - Default =3
 	int slotEstCounter_;
 	int rebuttal_;
-	int temp_;
+	int temp_; //Partial collisions counter
+	int tempSuc_; //Partial success counter
+	int suc_; //Partial success counter
 	int estMethod_;
+	int iL_; //Initial frame size for eom-lee method
 };
 
 //#endif // ns_rfidReader_h

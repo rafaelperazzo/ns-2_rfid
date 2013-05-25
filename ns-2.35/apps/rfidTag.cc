@@ -255,7 +255,7 @@ void RfidTagAgent::updateSlot() {
 	Random::seed_heuristically();
 	rng16_=Random::uniform(0,pow(2,memory_)-1);
         if (state_!=T_ACKNOWLEDGED) {
-		slot_=trunc(rng16_);
+		slot_=round(rng16_);
 	}
         if (debug_) printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
 }
@@ -264,7 +264,7 @@ void RfidTagAgent::updateSlot2() {
 	Random::seed_heuristically();
 	rng16_=Random::uniform(0,memory_);
         if (state_!=T_ACKNOWLEDGED) {
-		slot_=trunc(rng16_);
+		slot_=round(rng16_);
 	}
         if (debug_) printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
 }

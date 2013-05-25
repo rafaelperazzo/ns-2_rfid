@@ -66,7 +66,7 @@ public:
 } class_rfidReader;
 
 
-RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),counter_(0),rs_timer_(this),slotCounter_(0), collisions_(0), idle_(0),success_(0),total_(0),uniqCounter_(0),session_(0),operation_(0), estCounter_(1), slotEstCounter_(0), rebuttal_(0)
+RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0),counter_(0),rs_timer_(this),slotCounter_(0), collisions_(0), idle_(0),success_(0),total_(0),uniqCounter_(1),session_(0),operation_(0), estCounter_(1), slotEstCounter_(0), rebuttal_(0)
 {
 	bind("packetSize_", &size_);
 	bind("tagEPC_",&tagEPC_);
@@ -83,6 +83,7 @@ RfidReaderAgent::RfidReaderAgent() : Agent(PT_RFIDPACKET), state_(0), command_(0
 	bind("mechanism_",&mechanism_);
 	bind("estConstant_",&estConstant_);
 	bind("estMethod_",&estMethod_);
+	bind("iL_",&iL_);
 }
 
 int RfidReaderAgent::command(int argc, const char*const* argv)
@@ -130,10 +131,11 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	collisions_=0;
 	idle_=0;
 	success_=0;
+	suc_=0;
 	session_++;
 	slotCounter_=0;
 	total_=0;
-	uniqCounter_=0;
+	uniqCounter_=1;
 	slotEstCounter_=0;
 	rebuttal_=0;
 	query(RC_QUERY,uniqCounter_);
@@ -630,6 +632,7 @@ void RfidReaderAgent::start_edfsa() {
         if (counter_==1) { //SUCCESS
                 //printf("Slot %d : SUCCESS(%d)\n",uniqCounter_-1,tagEPC_);
 		success_++;
+		suc_++;
 		send_query_reply();
         }
 	if (counter_>1) { //COLLISION
@@ -642,16 +645,18 @@ void RfidReaderAgent::start_edfsa() {
 		rs_timer_.resched(t2_);
 	}
 	else { //Next frame	
-		temp_=collisions_;		
+		temp_=collisions_;
+		tempSuc_=suc_;
 		collisions_=0;
+		suc_=0;
 		idle_=0;
 		counter_=0;
-		uniqCounter_=0;
-		calculate_next_Q(temp_,estMethod_);				
+		uniqCounter_=1;
+		calculate_next_Q(temp_,tempSuc_,estMethod_);				
 	}
 }
 
-void RfidReaderAgent::calculate_next_Q(int col, int method) {
+void RfidReaderAgent::calculate_next_Q(int col, int suc, int method) {
 
 	if (col>0) {
 		if (method==0) { //LOWER BOUND
@@ -660,12 +665,21 @@ void RfidReaderAgent::calculate_next_Q(int col, int method) {
 			rs_timer_.resched(t2_); //Wait for tags responses			
 		}
 		else if (method==1) {
-			qValue_=round(2.39*col); //SHOUT
+			qValue_=round(2.39*col); //SCHOUTE
 			//printf("Identificadas %d tags\n",success_);
 			//printf("Restam %d tags\n",qValue_);
 			query(RC_QUERY,uniqCounter_);
 			rs_timer_.resched(t2_); //Wait for tags responses
 		}
+		else if (method==2) {
+                        qValue_=eomlee(0.0001,col,suc); 
+			//printf("Identificadas %d tags\n",success_);
+			//printf("Colidiram %d tags\n",collisions_);
+                        //printf("(estimativa)Restam %d tags\n",qValue_);
+                        query(RC_QUERY,uniqCounter_);
+                        rs_timer_.resched(t2_); //Wait for tags responses
+                }
+
 	}
 	else {
 		//printf("Total slots: %d\n",slotCounter_);
@@ -673,6 +687,22 @@ void RfidReaderAgent::calculate_next_Q(int col, int method) {
 		//printf("FIM\n");
 	}
 
+}
+
+int RfidReaderAgent::eomlee(float error, int col, int suc) {
+	float temp, bprox;
+	float y1 = 2, yprox;
+	float backlog;
+	//printf("Colidiram %d tags\n",col);
+	//printf("Sucesso em %d tags\n",suc);
+	do {
+        	bprox = (qValue_)/((y1*(float)col)+(float)suc);
+        	yprox = (1-exp((-1)/bprox))/(bprox*(1-(1+ 1/bprox)*exp((-1)/bprox)));
+        	backlog = yprox*col;
+        	temp = y1;
+        	y1 = yprox;
+        } while (fabs(y1-temp)>error);
+	return (round(backlog));
 }
 
 void RetransmitTimer::expire(Event *e) {
