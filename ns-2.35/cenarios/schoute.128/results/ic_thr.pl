@@ -22,4 +22,5 @@ for(my $i= 0; $i < @files; $i++) {
 	$stat->set_significance(95);
 	$stat->add_data(@r);
 	print $numero," ",$stat->mean()," ",$stat->lower_clm()," ",$stat->upper_clm()," ",$stat->standard_deviation(),"\n";
+	#printf "$numero %.2f %.3f %.3f %.3f\n", $stat->mean(), $stat->lower_clm(), $stat->upper_clm(), $stat->standard_deviation();
 }

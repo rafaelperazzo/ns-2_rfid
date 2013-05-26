@@ -21,5 +21,6 @@ for(my $i= 0; $i < @files; $i++) {
 	my $stat = new Statistics::PointEstimation;
 	$stat->set_significance(95);
 	$stat->add_data(@r);
-	print $numero," ",$stat->mean()," ",$stat->lower_clm()," ",$stat->upper_clm()," ",$stat->standard_deviation(),"\n";
+	#print $numero," ",$stat->mean()," ",$stat->lower_clm()," ",$stat->upper_clm()," ",$stat->standard_deviation(),"\n";
+	printf "$numero %.0f %.0f %.0f %.2f\n", $stat->mean(), $stat->lower_clm(), $stat->upper_clm(), $stat->standard_deviation();
 }
