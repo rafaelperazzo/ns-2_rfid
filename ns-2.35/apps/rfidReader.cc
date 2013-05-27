@@ -93,7 +93,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
       resend();
       return (TCL_OK);
     }
-    else if (strcmp(argv[1], "standard-query-tags") == 0) {
+    else if (strcmp(argv[1], "standard-query-tags") == 0) { //Q ALGORITHM
 	operation_=0;	
 	bigQ_=qValue_;
 	collisions_=0;
@@ -107,7 +107,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	rs_timer_.resched(t2_); //Wait for tags responses
 	return (TCL_OK);
     }
-    else if (strcmp(argv[1], "standard-with-estimation") == 0) {
+    else if (strcmp(argv[1], "standard-with-estimation") == 0) { //ESTIMATION ONLY
 	operation_=1;	
 	estCounter_=1;
 	bigQ_=qValue_;
@@ -124,7 +124,7 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	rs_timer_.resched(t2_); //Wait for tags responses
 	return (TCL_OK);
     }
-    else if (strcmp(argv[1], "edfsa-query") == 0) {
+    else if (strcmp(argv[1], "edfsa-query") == 0) { //DFSA - Eom-Lee, Schoute and Lower Bound
 	operation_=2;	
 	estCounter_=1;
 	bigQ_=qValue_;
@@ -135,10 +135,29 @@ int RfidReaderAgent::command(int argc, const char*const* argv)
 	session_++;
 	slotCounter_=0;
 	total_=0;
-	uniqCounter_=1;
+	uniqCounter_=1; //Initial slot time
 	slotEstCounter_=0;
 	rebuttal_=0;
 	query(RC_QUERY,uniqCounter_);
+	rs_timer_.resched(t2_); //Wait for tags responses
+	return (TCL_OK);
+    }
+
+    else if (strcmp(argv[1], "estimation-dfsa-query") == 0) { //Proposed Algortithm
+	operation_=3;	
+	estCounter_=1;
+	bigQ_=qValue_;
+	collisions_=0;
+	idle_=0;
+	success_=0;
+	suc_=0;
+	session_++;
+	slotCounter_=0;
+	total_=0;
+	uniqCounter_=1; //Initial slot time
+	slotEstCounter_=0;
+	rebuttal_=0;
+	send_query_estimate();
 	rs_timer_.resched(t2_); //Wait for tags responses
 	return (TCL_OK);
     }
@@ -264,32 +283,6 @@ void RfidReaderAgent::query(int command, int slotNumber) {
 
 void RfidReaderAgent::send_query() {
 
-	/*Packet* pkt = allocpkt(); 
-        //Create network header
-        hdr_ip* ipHeader = HDR_IP(pkt);
-        //Create RFID header
-        hdr_rfidPacket *rfidHeader = hdr_rfidPacket::access(pkt);
-        //Prepating headers
-        rfidHeader->id_ = id_; //Reader ID
-        rfidHeader->tipo_ = FLOW_RT; //flow direction
-        rfidHeader->singularization_ = singularization_; //imediatly reply or random time reply
-        rfidHeader->service_=service_;
-	rfidHeader->command_=RC_QUERY;
-	rfidHeader->qValue_=qValue_;
-	rfidHeader->tagEPC_=IP_BROADCAST;
-	rfidHeader->slotCounter_=slotCounter_;
-	rfidHeader->colCounter_=collisions_;
-	rfidHeader->idlCounter_=idle_;
-	rfidHeader->sucCounter_=success_;
-	rfidHeader->session_=session_;
-	rfidHeader->trace_=trace_;
-	rfidHeader->mechanism_=mechanism_;
-        ipHeader->daddr() = IP_BROADCAST; //Destination: broadcast
-        ipHeader->saddr() = here_.addr_; //Source: reader ip
-        ipHeader->sport() = here_.port_;
-        //Sends the packet
-        send(pkt, (Handler*) 0);
-	//Packet::free(pkt);*/
 	query(RC_QUERY,0);
 
 }
@@ -323,6 +316,22 @@ void RfidReaderAgent::finish(int dest) {
         send(pkt, (Handler*) 0);
 	//Packet::free(pkt);
 
+}
+
+void RfidReaderAgent::finish_start(int dest, int method) {
+	if (method==4) {
+		finish(dest);
+	}
+	else if (method==3) {
+		printf("Q = %d\nSlots = %d\n",qValue_,slotEstCounter_);
+		//Proposed Algorithm Start
+		service_=4;
+		estMethod_=2;
+		operation_=4;
+		slotCounter_=slotEstCounter_;		
+		query(RC_QUERY,uniqCounter_);
+		rs_timer_.resched(t2_); //Wait for tags responses
+	}
 }
 
 void RfidReaderAgent::send_query_estimate() {
@@ -519,7 +528,7 @@ void RfidReaderAgent::start_sing() {
         }
 }
 
-void RfidReaderAgent::reset_est() { //If soma=0 (-) if soma=1 (+) otherwise do not change
+void RfidReaderAgent::reset_est() { 
 	estCounter_=1;
 	collisions_=0;
 	idle_=0;
@@ -527,7 +536,7 @@ void RfidReaderAgent::reset_est() { //If soma=0 (-) if soma=1 (+) otherwise do n
 	counter_=0;
 }
 
-void RfidReaderAgent::update_Q(int soma) {
+void RfidReaderAgent::update_Q(int soma) { //If soma=0 (-) if soma=1 (+) otherwise do not change
 	
 	if (soma==0) {
 		Qfp_=Qfp_-c_;
@@ -543,7 +552,7 @@ void RfidReaderAgent::update_Q(int soma) {
 void RfidReaderAgent::check_rebuttal() {
 	if ((finalQ_==Qfp_)) { //Estimated Q found!
 		reset_est();		
-		finish(IP_BROADCAST);		
+		finish_start(IP_BROADCAST,estMethod_);		
 		//printf("O numero estimado de tags eh: %.0f(%.0f)\n",pow(2,round(finalQ_)),round(finalQ_));
 		//printf("Total de slots: %d\n",slotEstCounter_);
 	}
@@ -656,6 +665,41 @@ void RfidReaderAgent::start_edfsa() {
 	}
 }
 
+void RfidReaderAgent::start_estimationDFSA() {
+	slotCounter_++;
+	uniqCounter_++; //next slot
+	if (counter_==0) { //IDLE
+		//printf("Slot %d : IDLE\n",uniqCounter_-1);
+		idle_++;
+        }
+        if (counter_==1) { //SUCCESS
+                //printf("Slot %d : SUCCESS(%d)\n",uniqCounter_-1,tagEPC_);
+		success_++;
+		suc_++;
+		send_query_reply();
+        }
+	if (counter_>1) { //COLLISION
+      		//printf("Slot %d : COLLISION\n",uniqCounter_-1);
+		collisions_++;
+        }
+	if (uniqCounter_<=qValue_) {
+		counter_=0;		
+		query(RC_SING,uniqCounter_);
+		rs_timer_.resched(t2_);
+	}
+	else { //Next frame	
+		//printf("Slots em colisao para o frame (%d): %d\n",slotCounter_,collisions_);		
+		temp_=collisions_;
+		tempSuc_=suc_;
+		collisions_=0;
+		suc_=0;
+		idle_=0;
+		counter_=0;
+		uniqCounter_=1;
+		calculate_next_Q(temp_,tempSuc_,estMethod_);				
+	}
+}
+
 void RfidReaderAgent::calculate_next_Q(int col, int suc, int method) {
 
 	if (col>0) {
@@ -709,11 +753,14 @@ void RetransmitTimer::expire(Event *e) {
 	if (a_->operation_==0) { //Singularization	
 		a_->start_sing();
 	}
-	else if (a_->operation_==1) { //Estimation and singularization
+	else if ((a_->operation_==1)||(a_->operation_==3)) { //Estimation and singularization
 		a_->start_est();
 	}
 	else if (a_->operation_==2) { //Estimation and singularization
 		a_->start_edfsa();
+	}
+	else if (a_->operation_==4) { //Estimation and singularization
+		a_->start_estimationDFSA();
 	}
 }
 

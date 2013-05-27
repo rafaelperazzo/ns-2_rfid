@@ -108,9 +108,11 @@ public:
 	void start_est();
 	void update_Q(int soma);
 	void check_rebuttal();
-	void finish(int dest);
+	void finish(int dest); //Finish the Q Value Estimation
+	void finish_start(int dest, int method);
 	void send_query_reply_update_slot();
 	void start_edfsa();
+	void start_estimationDFSA();
 	void calculate_next_Q(int col, int suc, int method);
 	int eomlee(float error, int col, int suc);
 	double t2_; //slot time
@@ -121,7 +123,7 @@ public:
 	int success_;
 	int bigQ_; //Stores the biggest Q Value
 	int total_; //Total number of collisions
-	int uniqCounter_;
+	int uniqCounter_; //Slot time
 	int session_; //Query counter
 	int trace_; //1 - Simple trace 0 - Normal trace
 	int tagIP_;
@@ -135,7 +137,7 @@ public:
 	int temp_; //Partial collisions counter
 	int tempSuc_; //Partial success counter
 	int suc_; //Partial success counter
-	int estMethod_;
+	int estMethod_; //Estimation Method. 0 - Lower Bound. 1 - Schoute. 2 - Eom-Lee. 3 - Mota. 4 - No method
 	int iL_; //Initial frame size for eom-lee method
 };
 

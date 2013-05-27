@@ -230,6 +230,7 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 			if (hdr->slotNumber_==slot_) { //time to reply
 				state_=T_REPLY;
 				//send packet
+				//printf("[%d] replying at slot %d\n",tagEPC_,slot_);
 				sendPacket(pkt,TC_REPLY);
 			}
 		}
@@ -255,14 +256,14 @@ void RfidTagAgent::updateSlot() {
 	Random::seed_heuristically();
 	rng16_=Random::uniform(0,pow(2,memory_)-1);
         if (state_!=T_ACKNOWLEDGED) {
-		slot_=round(rng16_);
+		slot_=trunc(rng16_);
 	}
         if (debug_) printf("tag [%d] state (%d) updated slot to:  %d\n",tagEPC_,state_,slot_);
 }
 
 void RfidTagAgent::updateSlot2() {
 	Random::seed_heuristically();
-	rng16_=Random::uniform(0,memory_);
+	rng16_=Random::uniform(1,memory_);
         if (state_!=T_ACKNOWLEDGED) {
 		slot_=round(rng16_);
 	}
