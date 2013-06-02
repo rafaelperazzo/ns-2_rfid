@@ -26,6 +26,7 @@ struct hdr_rfidPacket {
 	int sucCounter_; //Success slot counter
 	int idlCounter_; //Idle slot counter
 	int slotNumber_;
+	int reply_;
 	int session_;
 	int trace_; //Include debug traces
 	int mechanism_; //QoS Mechanism: 0 off - 1 on

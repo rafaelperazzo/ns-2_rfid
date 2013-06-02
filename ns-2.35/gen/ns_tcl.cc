@@ -19505,6 +19505,9 @@ Agent/RfidReader set mechanism_ 0\n\
 Agent/RfidReader set estConstant_ 3\n\
 Agent/RfidReader set estMethod_ 1\n\
 Agent/RfidReader set iL_ 128\n\
+Agent/RfidReader set backlog_ 2\n\
+Agent/RfidReader set initialFrameSize_ 3\n\
+Agent/RfidReader set frameMultiplier_ 0.67\n\
 \n\
 Agent/RfidTag set packetSize_ 4\n\
 Agent/RfidTag set id_ 0\n\

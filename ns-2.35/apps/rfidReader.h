@@ -72,6 +72,14 @@ class RetransmitTimer : public TimerHandler {
                 RfidReaderAgent *a_;
  };
 
+class CollisionsTimer : public TimerHandler {
+        public:
+                CollisionsTimer(RfidReaderAgent *a) : TimerHandler() { a_ = a; }
+	protected:
+                virtual void expire(Event *e);
+                RfidReaderAgent *a_;
+ };
+
 
 class RfidReaderAgent : public Agent {
 public:
@@ -99,7 +107,7 @@ public:
 	enum READER_COMMAND{RC_QUERY=0,RC_QUERYADJUST=1, RC_QUERYREPLY=2,RC_ACK=3,RC_NAK=4, TC_REPLY=5, RC_EST=6, TR_EST_REPLY=7, RC_EST_FINISH=8, RC_SING=9}reader_command;
 	void resend();
 	void send_query(); //Initial command
-	void query(int command, int slotNumber);
+	void query(int command, int slotNumber, int rep);
 	void send_query_estimate(); //Initial estimate command
 	void send_query_ajust(); //QueryAdjust
 	void send_query_reply(); //QueryReply
@@ -113,10 +121,12 @@ public:
 	void send_query_reply_update_slot();
 	void start_edfsa();
 	void start_estimationDFSA();
-	void calculate_next_Q(int col, int suc, int method);
-	int eomlee(float error, int col, int suc);
+	void resolve_collisions();
+	void calculate_next_Q(int col, int suc, int method, int rep);
+	int eomlee(float error, int col, int suc, int rep);
 	double t2_; //slot time
 	RetransmitTimer rs_timer_;
+	CollisionsTimer col_timer_;
 	int slotCounter_; //Total number of slots
 	int collisions_; //Number of collision slots
 	int idle_; //Number of idle slots
@@ -139,6 +149,15 @@ public:
 	int suc_; //Partial success counter
 	int estMethod_; //Estimation Method. 0 - Lower Bound. 1 - Schoute. 2 - Eom-Lee. 3 - Mota. 4 - No method
 	int iL_; //Initial frame size for eom-lee method
+	FILE *fp;
+	/* RESOLVE COLLISIONS VARS */
+	int subQValue_;
+	int subSlotNumber_;
+	int slotNumber_;
+	int backlog_; //0 - LB; 1 - Schoute; 2 - Eom-Lee; 3 - 2.45
+	int initialFrameSize_; //Initial frame size for backlog_
+	double frameMultiplier_; //Adjust initial frame size
+	/* END COLLISIONS VARS */
 };
 
 //#endif // ns_rfidReader_h

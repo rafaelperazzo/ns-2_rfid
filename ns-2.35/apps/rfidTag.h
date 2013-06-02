@@ -78,6 +78,7 @@ public:
 	int slot_; //Slot number
 	float rng16_; //Random number
 	int memory_; //Optional memory
+	int memory2_; //Optional memory 2
 	int state_; //Tag state
 	int debug_;
 	double seed_;

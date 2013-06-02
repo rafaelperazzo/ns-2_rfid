@@ -66,7 +66,7 @@ public:
 	}
 } class_rfidTag;
 
-RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), slot_(0), rng16_(0),state_(0)
+RfidTagAgent::RfidTagAgent() : Agent(PT_RFIDPACKET), slot_(0), rng16_(0),state_(0), memory2_(-1)
 {
 	bind("packetSize_", &size_);
 	bind("id_",&id_);
@@ -212,31 +212,62 @@ void RfidTagAgent::recv(Packet* pkt, Handler*)
 	}
 	/* ESTIMATED DFSA ALGORITHM **/
 	else if (hdr->service_==SERVICE_EDFSA) { //EDFSA ALGORITHM
-		
-		if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) {	//START AND ADJUST
-			memory_=hdr->qValue_; //Storing received Q Value in memory		
-			state_=T_ARBITRATE;
-			updateSlot2(); //UPDATING SLOT
-			//printf("[%d] slot (%d)\n",tagEPC_,slot_);	
-			//printf("Q= ---------> (%d) <----------------\n",memory_);
-			if (hdr->slotNumber_==slot_) { //time to reply
-				state_=T_REPLY;
-				//send packet
-				//printf("[%d] replying at slot %d\n",tagEPC_,slot_);
-				sendPacket(pkt,TC_REPLY);
+		if ((hdr->command_==RC_QUERY)&&(state_!=T_ACKNOWLEDGED)) { //START AND ADJUST		
+			if (hdr->reply_==0) {	//All tags should receive the query
+				memory_=hdr->qValue_; //Storing received Q Value in memory
+				state_=T_ARBITRATE;
+				updateSlot2(); //UPDATING SLOT
+				if (hdr->slotNumber_==slot_) { //time to reply
+					state_=T_REPLY;
+					//send packet
+					sendPacket(pkt,TC_REPLY);
+				}
+			}
+			else if (hdr->reply_>0) { //Only collided tags should receive the query
+								
+				if (hdr->reply_==slot_) { 
+					memory_=hdr->qValue_; //Storing received Q Value in memory
+					memory2_=hdr->reply_;					
+					state_=T_ARBITRATE;					
+					updateSlot2(); //UPDATING SLOT
+					if (hdr->slotNumber_==slot_) { //time to reply
+						state_=T_REPLY;
+						//send packet
+						sendPacket(pkt,TC_REPLY);
+					}		
+				}
+				else if (hdr->reply_==memory2_) {
+					memory_=hdr->qValue_; //Storing received Q Value in memory				
+					state_=T_ARBITRATE;				
+					updateSlot2(); //UPDATING SLOT
+					if (hdr->slotNumber_==slot_) { //time to reply
+						state_=T_REPLY;
+						//send packet
+						sendPacket(pkt,TC_REPLY);
+					}
+				}
 			}
 		}
 		else if ((hdr->command_==RC_SING)&&(state_!=T_ACKNOWLEDGED)) {
-			if (hdr->slotNumber_==slot_) { //time to reply
-				state_=T_REPLY;
-				//send packet
-				//printf("[%d] replying at slot %d\n",tagEPC_,slot_);
-				sendPacket(pkt,TC_REPLY);
+			
+			if (hdr->reply_==0) {	//All tags should receive the query
+				if (hdr->slotNumber_==slot_) { //time to reply
+					state_=T_REPLY;
+					sendPacket(pkt,TC_REPLY);
+				}
+			}
+			else if (hdr->reply_>0) {				
+											
+				if (hdr->reply_==memory2_) {
+					if (hdr->slotNumber_==slot_) { //time to reply
+						state_=T_REPLY;
+						sendPacket(pkt,TC_REPLY);
+					}	
+				}
 			}
 		}
 		else if ((hdr->command_==RC_QUERYREPLY)&&(state_!=T_ACKNOWLEDGED)) {
 			state_=T_ACKNOWLEDGED;
-			//printf("[%d] recebeu ACK\n",tagEPC_);
 		}
 
 	}
