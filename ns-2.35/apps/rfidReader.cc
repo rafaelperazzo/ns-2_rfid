@@ -807,6 +807,21 @@ void RfidReaderAgent::calculate_next_Q(int col, int suc, int method, int rep) {
                                 col_timer_.resched(t2_); //Wait for tags responses      
                         }
                 }
+		else if (method==4) { //2.62
+
+                        if (rep==0) {   //STANDARD DFSA         
+                                qValue_=2.62*col;
+                                query(RC_QUERY,uniqCounter_,rep);
+                                rs_timer_.resched(t2_); //Wait for tags responses
+                        }
+                        else { //Proposed Algorithm
+                                subQValue_=2.62*col; 
+                                //printf("Calculando eom-lee proposed (%d) (rep: %d)...\n",subQValue_,rep);
+                                query(RC_QUERY,subSlotNumber_,rep);
+                                col_timer_.resched(t2_); //Wait for tags responses      
+                        }
+                }
+
 
 
 	}

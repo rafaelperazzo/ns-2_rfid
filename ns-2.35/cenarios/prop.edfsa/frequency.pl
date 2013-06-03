@@ -12,7 +12,7 @@ use Statistics::PointEstimation;
 	my $stat = new Statistics::PointEstimation;
 	#$stat->add_data(1,2,2,2,2,2,2,3,3,3,4,4,5,5,6,7,8);
 	$stat->add_data(@r);
-	%f = $stat->frequency_distribution(10);
+	%f = $stat->frequency_distribution(11);
 	for (sort {$a <=> $b} keys %f) {
 		#print "key = $_, count = $f{$_}\n";
 		#print "$_ $f{$_}\n";
